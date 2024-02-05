@@ -68,6 +68,7 @@ packages, dependencies, and technologies used in this application:
 
 Website sources and research information 
 - [Ant Design](https://ant.design/docs/spec/colors)
+- [BGG API How To Guide](https://www.tayloraliss.com/bggapi/index.html)
 
 
 ## Issues
