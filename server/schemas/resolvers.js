@@ -18,8 +18,8 @@ const resolvers = {
       return BoardGames.find(params).sort({ createdAt: -1 }); 
     },
     // get a board game by id
-    boardGames: async (parent, { _id }) => {
-      return BoardGames.findOne({ _id }); 
+    boardGame: async (parent, { _id }) => {
+      return BoardGame.findOne({ _id }); 
     },
   },
   Mutation: {
