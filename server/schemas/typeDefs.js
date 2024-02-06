@@ -1,16 +1,15 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
-
-type User{
+  type User {
     _id: ID!
     username: String!
     email: String!
     gamesCount: Int
     wishList: [Game]
-}
+  }
 
-type BoardGame{
+  type BoardGame {
     gameId: ID!
     gameName: String!
     creators: [String]
@@ -21,25 +20,25 @@ type BoardGame{
     description: String
     gameImage: String
     gamelink: String
-}
+  }
 
-type Post {
+  type Post {
     postId: ID!
     title: String!
     content: String!
     user: User!
-    comments: [Comment]  
+    comments: [Comment]
   }
 
-  type Comment{
+  type Comment {
     CommentId: ID!
-    text: String! 
+    text: String!
     user: User!
     boardGame: BoardGame!
     post: Post!
   }
 
-  type Auth{
+  type Auth {
     token: ID!
     user: User
   }
@@ -58,7 +57,6 @@ type Post {
     addComment(commentData: CommentInput!): User
     removeComment(commentId: String!): User
   }
-
 `;
 
-module.exports = typeDefs; 
+module.exports = typeDefs;
