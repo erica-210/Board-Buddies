@@ -6,7 +6,7 @@ const typeDefs = gql`
     username: String!
     email: String!
     gamesCount: Int
-    wishList: [Game]
+    savedGames: [BoardGames]
   }
 
   type BoardGame {
@@ -34,7 +34,7 @@ const typeDefs = gql`
     CommentId: ID!
     text: String!
     user: User!
-    boardGame: BoardGame!
+    boardGame: [BoardGames]
     post: Post!
   }
 
@@ -47,7 +47,7 @@ const typeDefs = gql`
     me: User
     users: [User]
     user(username: String!): User
-    boardGames(username: String): [BoardGame]
+    boardGames(username: String): [BoardGames]
     boardGame(gameId: ID!): BoardGame
     
   }
