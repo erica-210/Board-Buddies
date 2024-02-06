@@ -4,6 +4,11 @@
 
 Board game reddit style thread page. 
 
+ <!-- addPost(postData: PostInput!): User
+    removePost(postId: String!): User
+    addComment(commentData: CommentInput!): User
+    removeComment(commentId: String!): User -->
+
 ## Table of Contents
 * [User Story](#user-story)
 * [Project Requirements](#project-requirements)

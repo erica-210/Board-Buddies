@@ -45,6 +45,11 @@ const typeDefs = gql`
 
   type Query {
     me: User
+    users: [User]
+    user(username: String!): User
+    boardGames(username: String): [BoardGame]
+    boardGame(gameId: ID!): BoardGame
+    
   }
 
   type Mutation {
@@ -52,10 +57,7 @@ const typeDefs = gql`
     addUser(username: String!, email: String!, password: String!): Auth
     savedGame(gameData: GameInput!): User
     removeBoardGame(gameId: String!): User
-    addPost(postData: PostInput!): User
-    removePost(postId: String!): User
-    addComment(commentData: CommentInput!): User
-    removeComment(commentId: String!): User
+   
   }
 `;
 
