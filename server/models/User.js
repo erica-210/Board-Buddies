@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 const bcrypt = require('bcrypt');
-const BoardGames = require('./BoardGames.js');
+const gameSchema = require('./BoardGames.js');
 
 const userSchema = new Schema({
     username: {
@@ -20,7 +20,7 @@ const userSchema = new Schema({
         type: String,
         required: true,
       },
-      savedGames: [BoardGames],
+      savedGames: [gameSchema],
     },
    
     {
