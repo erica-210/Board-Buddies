@@ -20,15 +20,14 @@ const  gameSchema = new Schema({
         type: String,
         
     },
-
     gameImage: {
         type: String,
-        
     },
+    
     gameLink: {
         type: String,
-        required: true,
     },
+
     players: {
         type: Number,
        
