@@ -52,11 +52,11 @@ const resolvers = {
       return { token, user };
     },
     // add a board game
-    savedGame: async (parent, { boardGameId }, context) => { 
+    savedGame: async (parent, { gameData }, context) => { 
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $push: { savedGames: boardGameId } },
+          { $addToSet: { savedGames: gameData } },
           { new: true }
         );
         return updatedUser;
@@ -65,12 +65,12 @@ const resolvers = {
       throw new AuthenticationError("Login required!");
     },
     // remove a board game
-    removeBoardGame: async (parent, { boardGameId }, context) => {
+    removeBoardGame: async (parent, { gameId }, context) => {
       if (context.user) {
         // Update user's document to remove book from savedBooks array
         const updatedUser = await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $pull: { savedGames: boardGameId } },
+          { $pull: { savedGames: gameId } },
           { new: true }
         );
         return updatedUser;
