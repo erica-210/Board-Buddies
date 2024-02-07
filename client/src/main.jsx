@@ -8,7 +8,6 @@ import Profile from './pages/Profile';
 import SearchGames from './pages/SearchGames';
 import SinglePost from './pages/SinglePost';
 
-
 const router = createBrowserRouter([
   {
     path: "/",
