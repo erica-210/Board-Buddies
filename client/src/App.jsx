@@ -6,7 +6,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import HelloReact from './components/Header/HelloReact';
 // import Header from './components/Header/index';
 // import Footer from './components/Footer/index';
-// import Login from './components/LoginForm/index';
+import Login from './components/LoginForm/Login';
 
 const client = new ApolloClient({
   uri: '/graphql',
@@ -19,7 +19,7 @@ function App() {
       <div className="flex-column justify-center align-center min-100-vh bg-primary">
        
         <HelloReact />
-        {/* <Login /> */}
+        <Login />
         {/* <Header /> */}
         {/* <Footer /> */}
       </div>
