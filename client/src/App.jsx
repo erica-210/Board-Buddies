@@ -1,8 +1,12 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+// import { Outlet } from 'react-router-dom';
+// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// import { setContext } from '@apollo/client/link/context';
 
-
-import HelloReact from './components/HelloReact';
-import Login from './components/LoginForm/Login';
+import HelloReact from './components/Header/HelloReact';
+// import Header from './components/Header/index';
+// import Footer from './components/Footer/index';
+// import Login from './components/LoginForm/index';
 
 const client = new ApolloClient({
   uri: '/graphql',
@@ -15,7 +19,9 @@ function App() {
       <div className="flex-column justify-center align-center min-100-vh bg-primary">
        
         <HelloReact />
-         <Login />
+        {/* <Login /> */}
+        {/* <Header /> */}
+        {/* <Footer /> */}
       </div>
     </ApolloProvider>
   );
