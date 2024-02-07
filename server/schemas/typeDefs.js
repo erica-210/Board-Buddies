@@ -49,7 +49,8 @@ const typeDefs = gql`
     user(username: String!): User
     boardGames(username: String): [BoardGame]
     boardGame(gameId: ID!): BoardGame
-    
+    posts(username: String)]: [Post]
+    post(postId: ID!): Post
   }
 
   type Mutation {
@@ -57,7 +58,10 @@ const typeDefs = gql`
     addUser(username: String!, email: String!, password: String!): Auth
     savedGame(gameData: ID!): User
     removeBoardGame(gameId: ID!): User
-   
+    addPost(commentText: String!): Post
+    removePost(postId: String!): Post
+    addComment(postId: ID!, commentText: String!): Post
+    removeComment(postId: ID!, commentId: ID!): Post
   }
 `;
 
