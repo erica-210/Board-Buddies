@@ -15,13 +15,23 @@ const resolvers = {
     // get all board games
     boardGames: async (parent, { username }) => {
       const params = username ? { username } : {};
-      return BoardGames.find(params).sort({ createdAt: -1 }); 
+      return BoardGames.find(params).sort({ createdAt: -1 });
     },
     // get a board game by id
     boardGame: async (parent, { _id }) => {
-      return BoardGame.findOne({ _id }); 
+      return BoardGame.findOne({ _id });
+    },
+    // get all posts
+    posts: async (parent, { username }) => {
+      const params = username ? { username } : {};
+      return Post.find(params).sort({ createdAt: -1 });
+    },
+    // get a post by id
+    post: async (parent, { _id }) => {
+      return Post;
     },
   },
+
   Mutation: {
     // add a user
     addUser: async (parent, { username, email, password }) => {
@@ -52,7 +62,7 @@ const resolvers = {
       return { token, user };
     },
     // add a board game
-    savedGame: async (parent, { gameData }, context) => { 
+    savedGame: async (parent, { gameData }, context) => {
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
@@ -74,6 +84,72 @@ const resolvers = {
           { new: true }
         );
         return updatedUser;
+      }
+      // Throw error if user is not authenticated
+      throw new AuthenticationError("Login required!");
+    },
+    // add a post
+    addPost: async (parent, { postData }, context) => {
+      if (context.user) {
+        const post = await Post.create({
+          ...postData,
+          username: context.user.username,
+        });
+        await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { posts: post._id } }
+        );
+        return post;
+      }
+      // Throw error if user is not authenticated
+      throw new AuthenticationError("Login required!");
+    },
+    // remove a post
+    removePost: async (parent, { postId }, context) => {
+      if (context.user) {
+        const post = await Post.findOneAndDelete({
+          _id: postId,
+          username: context.user.username,
+        });
+        await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $pull: { posts: postId } }
+        );
+        return post;
+      }
+      // Throw error if user is not authenticated
+      throw new AuthenticationError("Login required!");
+    },
+    // add a comment
+    addComment: async (parent, { postId, commentText }, context) => {
+      if (context.user) {
+        const updatedPost = await Post.findOneAndUpdate(
+          { _id: postId },
+          {
+            $addToSet: {
+              comments: { commentText, username: context.user.username },
+            },
+          },
+          { new: true, runValidators: true }
+        );
+        return updatedPost;
+      }
+      // Throw error if user is not authenticated
+      throw new AuthenticationError("Login required!");
+    },
+    // remove a comment
+    removeComment: async (parent, { postId, commentId }, context) => {
+      if (context.user) {
+        const updatedPost = await Post.findOneAndUpdate(
+          { _id: postId },
+          {
+            $pull: {
+              comments: { _id: commentId, username: context.user.username },
+            },
+          },
+          { new: true }
+        );
+        return updatedPost;
       }
       // Throw error if user is not authenticated
       throw new AuthenticationError("Login required!");
