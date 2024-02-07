@@ -1,9 +1,24 @@
-// TODO: Add a comment explaining what this import statement is doing
-import HelloReact from './components/HelloReact';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
-// TODO: Add a comment explaining the purpose of the App component
+
+import HelloReact from './components/HelloReact';
+import Login from './components/LoginForm/Login';
+
+const client = new ApolloClient({
+  uri: '/graphql',
+  cache: new InMemoryCache(),
+});
+
 function App() {
-  return <HelloReact />;
+  return (
+    <ApolloProvider client={client}>
+      <div className="flex-column justify-center align-center min-100-vh bg-primary">
+       
+        <HelloReact />
+         <Login />
+      </div>
+    </ApolloProvider>
+  );
 }
 
 export default App;
