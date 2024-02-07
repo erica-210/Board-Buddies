@@ -26,16 +26,16 @@ const startApolloServer = async () => {
   app.use(express.json());
 
   const __dirname = path.dirname("");
-  const buildPath = path.join(__dirname, "../client/build");
+  const buildPath = path.join(__dirname, "../client/dist");
   app.use(express.static(buildPath));
 
   // if we're in production, serve client/build as static assets
   if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "../client/build")));
+    app.use(express.static(path.join(__dirname, "../client/dist")));
   }
 
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/build/index.html"));
+    res.sendFile(path.join(__dirname, "../client/dist/index.html"));
   });
 
   app.use("/graphql", expressMiddleware(server));
