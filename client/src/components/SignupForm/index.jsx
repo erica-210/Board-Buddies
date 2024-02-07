@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import Auth from '../utils/auth';
+import Auth from '../utils/auth.js';
 import { ADD_USER } from '../utils/mutations';
 
 function Signup(props) {
@@ -28,7 +28,7 @@ function Signup(props) {
       [name]: value,
     });
     };
-}
+
 
 return (
     <div className="container my-1">
@@ -71,6 +71,6 @@ return (
       </form>
     </div>
   );
-
+}
 
 export default Signup;
