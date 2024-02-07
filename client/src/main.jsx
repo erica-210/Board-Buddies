@@ -6,7 +6,7 @@ import Home from './pages/Home';
 import SingleGame from './pages/SingleGame';
 import Profile from './pages/Profile';
 import SearchGames from './pages/SearchGames';
-import SinglePost from './pages/singlePost';
+import SinglePost from './pages/SinglePost';
 
 
 const router = createBrowserRouter([
