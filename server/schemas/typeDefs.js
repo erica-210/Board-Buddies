@@ -49,7 +49,7 @@ const typeDefs = gql`
     user(username: String!): User
     boardGames(username: String): [BoardGame]
     boardGame(gameId: ID!): BoardGame
-    posts(username: String)]: [Post]
+    posts(username: String): [Post]
     post(postId: ID!): Post
   }
 
