@@ -2,10 +2,11 @@ import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import App from './App.jsx';
-import Home from './Home.jsx';
-import SavedGames from './SavedGames.jsx';
-import SearchGames from './SearchGames.jsx';
-import SingleComment from './singleComment.jsx';
+import Home from './pages/Home';
+import SingleGame from './pages/SingleGame';
+import Profile from './pages/Profile';
+import SearchGames from './pages/SearchGames';
+import SinglePost from './pages/singlePost';
 
 
 const router = createBrowserRouter([
@@ -15,9 +16,10 @@ const router = createBrowserRouter([
     errorElement: <h1 className='display-2'>Wrong page!</h1>,
     children: [
       { index: true, element: <Home /> },
-      { path: "/saved", element: <SavedGames /> },
+      { path: "/profiles/:username", element: <Profile /> },
       { path: "/search", element: <SearchGames /> },
-      { path: "/comments", element: <SingleComment /> },
+      { path: "/boardgame/:id", element: <SingleGame /> },
+      { path: "/post/:id", element: <SinglePost /> },
     ]
   },
 ]);
