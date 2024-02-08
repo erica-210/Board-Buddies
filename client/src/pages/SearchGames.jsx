@@ -1,10 +1,14 @@
 import React from 'react';
 
+import Login from '../components/LoginForm/Login';
+import Signup from '../components/SignupForm/index';
+
 const SearchGames = () => {
   return (
     <div>
       <h1>Welcome to the Search Games Page</h1>
-      {/* Add your home page content here */}
+     <Login />
+     <Signup />
     </div>
   );
 };
