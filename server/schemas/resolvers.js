@@ -13,21 +13,21 @@ const resolvers = {
       return User.findOne({ username }).populate("savedGames");
     },
     // get all board games
-    boardGame: async (parent, { username }) => {
+    boardGames: async (parent, { username }) => {
       const params = username ? { username } : {};
       return BoardGames.find(params).sort({ createdAt: -1 });
     },
     // get a board game by id
-    boardGame: async (parent, { _id }) => {
+    boardGameById: async (parent, { _id }) => {
       return BoardGames.findOne({ _id });
     },
     // get all posts
-    post: async (parent, { username }) => {
+    posts: async (parent, { username }) => {
       const params = username ? { username } : {};
       return Posts.find(params).sort({ createdAt: -1 });
     },
     // get a post by id
-    post: async (parent, { _id }) => {
+    postById: async (parent, { _id }) => {
       return Posts.findOne({ _id });
     },
   },
@@ -62,10 +62,10 @@ const resolvers = {
       return { token, user };
     },
     // add a board game
-    savedGame: async (parent, { gameData }, context) => {
+    saveBoardGame: async (parent, { gameData }, context) => {
       if (context.user) {
-        const updatedUser = await User.findOneAndUpdate(
-          { _id: context.user._id },
+        const updatedUser = await User.findByIdAndUpdate(
+          context.user._id,
           { $addToSet: { savedGames: gameData } },
           { new: true }
         );
@@ -79,7 +79,7 @@ const resolvers = {
       if (context.user) {
         // Update user's document to remove book from savedBooks array
         const updatedUser = await User.findByIdAndUpdate(
-          { _id: context.user._id },
+          context.user._id,
           { $pull: { savedGames: gameId } },
           { new: true }
         );
@@ -96,7 +96,7 @@ const resolvers = {
           username: context.user.username,
         });
         await User.findByIdAndUpdate(
-          { _id: context.user._id },
+          context.user._id,
           { $addToSet: { posts: post._id } }
         );
         return post;
@@ -112,7 +112,7 @@ const resolvers = {
           username: context.user.username,
         });
         await User.findByIdAndUpdate(
-          { _id: context.user._id },
+          context.user._id,
           { $pull: { posts: postId } }
         );
         return post;
