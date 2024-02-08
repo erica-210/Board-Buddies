@@ -7,6 +7,8 @@ const typeDefs = gql`
     email: String!
     gamesCount: Int
     savedGames: [BoardGame]
+    post: [Post]
+    comment: [Comment]
   }
 
   type BoardGame {
@@ -34,7 +36,7 @@ const typeDefs = gql`
     CommentId: ID!
     text: String!
     user: User!
-    boardGame: [BoardGame]
+    boardGame: BoardGame
     post: Post!
   }
 
