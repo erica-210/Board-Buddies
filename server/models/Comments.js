@@ -1,4 +1,4 @@
-const { Schema } = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const commentSchema = new Schema({
   username: {
@@ -13,6 +13,18 @@ const commentSchema = new Schema({
     type: String,
     required: true,
   },
+  postId: {
+    type: Schema.Types.ObjectId,
+    ref: "Post",
+    required: true,
+  },
+  boardGameId: {
+    type: Schema.Types.ObjectId,
+    ref: "BoardGame",
+    required: true,
+  },
 });
 
-module.exports = commentSchema;
+const Comment = model("Comment", commentSchema);
+
+module.exports = Comment;
