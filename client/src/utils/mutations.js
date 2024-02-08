@@ -87,3 +87,58 @@ export const REMOVE_GAME = gql`
     }
   }
 `;
+
+export const ADD_POST = gql`
+  mutation addPost($title: String!, $user: String!) {
+    addPost(title: $title, user: $user) {
+      _id
+      title
+      content
+      user {
+        _id
+        username
+      }
+      comments {
+        _id
+        commentText
+        createdAt
+      }
+    }
+  }
+`;
+
+export const ADD_COMMENT = gql`
+  mutation addComment($postId: ID!, $commentText: String!) {
+    addComment(postId: $postId, commentText: $commentText) {
+      _id
+      content
+      user {
+        _id
+        username
+      }
+      comments {
+        _id
+        commentText
+        createdAt
+      }
+    }
+  }
+`;
+
+export const REMOVE_COMMENT = gql`
+  mutation removeComment($postId: ID!, $commentId: ID!) {
+    removeComment(postId: $postId, commentId: $commentId) {
+      _id
+      content
+      user {
+        _id
+        username
+      }
+      comments {
+        _id
+        commentText
+        createdAt
+      }
+    }
+  }
+`;
