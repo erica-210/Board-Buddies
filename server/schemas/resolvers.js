@@ -1,5 +1,5 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { BoardGames, User } = require("../models");
+const { BoardGames, User, Posts, Comments } = require("../models");
 const { signToken } = require("../utils/auth");
 
 const resolvers = {
@@ -13,22 +13,22 @@ const resolvers = {
       return User.findOne({ username }).populate("savedGames");
     },
     // get all board games
-    boardGames: async (parent, { username }) => {
+    boardGame: async (parent, { username }) => {
       const params = username ? { username } : {};
       return BoardGames.find(params).sort({ createdAt: -1 });
     },
     // get a board game by id
     boardGame: async (parent, { _id }) => {
-      return BoardGame.findOne({ _id });
+      return BoardGames.findOne({ _id });
     },
     // get all posts
-    posts: async (parent, { username }) => {
+    post: async (parent, { username }) => {
       const params = username ? { username } : {};
-      return Post.find(params).sort({ createdAt: -1 });
+      return Posts.find(params).sort({ createdAt: -1 });
     },
     // get a post by id
     post: async (parent, { _id }) => {
-      return Post;
+      return Posts.findOne({ _id });
     },
   },
 
@@ -91,7 +91,7 @@ const resolvers = {
     // add a post
     addPost: async (parent, { postData }, context) => {
       if (context.user) {
-        const post = await Post.create({
+        const post = await Posts.create({
           ...postData,
           username: context.user.username,
         });
@@ -107,7 +107,7 @@ const resolvers = {
     // remove a post
     removePost: async (parent, { postId }, context) => {
       if (context.user) {
-        const post = await Post.findOneAndDelete({
+        const post = await Posts.findOneAndDelete({
           _id: postId,
           username: context.user.username,
         });
@@ -123,7 +123,7 @@ const resolvers = {
     // add a comment
     addComment: async (parent, { postId, commentText }, context) => {
       if (context.user) {
-        const updatedPost = await Post.findOneAndUpdate(
+        const updatedPost = await Comments.findOneAndUpdate(
           { _id: postId },
           {
             $addToSet: {
@@ -140,7 +140,7 @@ const resolvers = {
     // remove a comment
     removeComment: async (parent, { postId, commentId }, context) => {
       if (context.user) {
-        const updatedPost = await Post.findOneAndUpdate(
+        const updatedPost = await Comments.findOneAndUpdate(
           { _id: postId },
           {
             $pull: {
