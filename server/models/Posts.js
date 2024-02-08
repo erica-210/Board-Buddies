@@ -1,18 +1,28 @@
-const { Schema } = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const postSchema = new Schema({
-  username: {
+  title: {
     type: String,
     required: true,
   },
-  gameName: {
+  content: {
     type: String,
     required: true,
   },
-  postContent: {
-    type: String,
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Comment",
+      required: true,
+    },
+  ],
 });
 
-module.exports = postSchema;
+const Post = model("Post", postSchema);
+
+module.exports = Post;
