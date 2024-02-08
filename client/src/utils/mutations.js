@@ -25,6 +25,64 @@ export const ADD_USER = gql`
       token
       user {
         _id
+        username
+        email
+        gameCount
+        savedGames {
+          gameId
+          gameName
+          creators
+          category
+          players
+          playTime
+          description
+          gameImage
+          gamelink
+        }
+      }
+    }
+  }
+`;
+
+export const SAVE_GAME = gql`
+  mutation saveGame($game: savedGameInput!) {
+    saveGame(game: $game) {
+      _id
+      username
+      email
+      gameCount
+      savedGames {
+        gameId
+        gameName
+        creators
+        category
+        players
+        playTime
+        description
+        gameImage
+        gamelink
+      }
+    }
+  }
+`;
+
+export const REMOVE_GAME = gql`
+  mutation removeGame($gameId: ID!) {
+    removeGame(gameId: $gameId) {
+      _id
+      username
+      email
+      gameCount
+      savedGames {
+        gameId
+        gameName
+        creators
+        category
+        players
+        playTime
+        description
+        gameImage
+        gamelink
       }
     }
   }
