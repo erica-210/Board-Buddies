@@ -39,14 +39,7 @@ db.once('open', async () => {
     //     },
     // ]);
 
-    await User.create({
-        username: 'test',
-        email: 'nick.canchola.7.27@gmail.com',
-        password: 'password12345',
-        savedGames: [],
-        posts: [], 
-        comments: [],
-    });
+
 
     console.log('User created!');
     process.exit();
