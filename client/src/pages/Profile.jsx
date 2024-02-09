@@ -1,14 +1,13 @@
 import React from 'react';
 
-import Login from '../components/LoginForm/Login';
-import Signup from '../components/SignupForm/index';
+import WishList from '../components/WishList';
 
 const Profile = () => {
   return (
     <div>
       <h1>Welcome to the Profile Page</h1>
-      <Login />
-      <Signup />
+      <WishList />
+      
     </div>
   );
 };
