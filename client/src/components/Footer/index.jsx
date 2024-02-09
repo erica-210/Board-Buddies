@@ -14,7 +14,7 @@ const Footer = () => {
             &larr; Go Back
           </button>
         )}
-        <p>
+        <div>
         <h4>
           Made with{' '}
           <span
@@ -32,7 +32,7 @@ const Footer = () => {
             <a href="https://github.com/Lunafish01"><strong>Joshua Luna</strong></a> 
             <a href="https://github.com/DamascusKraken"><strong>Nicholas Canchola</strong></a> 
         </h1>
-        </p>
+        </div>
       </div>
     </footer>
   );
