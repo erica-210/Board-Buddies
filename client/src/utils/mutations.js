@@ -6,103 +6,75 @@ export const LOGIN = gql`
       token
       user {
         _id
+        username
+        email
       }
     }
   }
 `;
 
 export const ADD_USER = gql`
-  mutation addUser(
-        $username: String!
-        $email: String!
-        $password: String!
-  ) {
-    addUser(
-        username: $username
-        email: $email
-        password: $password
-    ) {
+  mutation addUser($username: String!, $email: String!, $password: String!) {
+    addUser(username: $username, email: $email, password: $password) {
       token
       user {
         _id
         username
         email
-        gameCount
-        savedGames {
-          gameId
-          gameName
-          creators
-          category
-          players
-          playTime
-          description
-          gameImage
-          gamelink
-        }
       }
     }
   }
 `;
 
-export const SAVE_GAME = gql`
-  mutation saveGame($game: savedGameInput!) {
-    saveGame(game: $game) {
+export const SAVE_BOARD_GAME = gql`
+  mutation saveBoardGame($gameData: ID!) {
+    saveBoardGame(gameData: $gameData) {
       _id
       username
-      email
-      gameCount
       savedGames {
         gameId
         gameName
-        creators
-        category
-        players
-        playTime
-        description
-        gameImage
-        gamelink
       }
     }
   }
 `;
 
-export const REMOVE_GAME = gql`
-  mutation removeGame($gameId: ID!) {
-    removeGame(gameId: $gameId) {
+export const REMOVE_BOARD_GAME = gql`
+  mutation removeBoardGame($gameId: ID!) {
+    removeBoardGame(gameId: $gameId) {
       _id
       username
-      email
-      gameCount
       savedGames {
         gameId
         gameName
-        creators
-        category
-        players
-        playTime
-        description
-        gameImage
-        gamelink
       }
     }
   }
 `;
 
 export const ADD_POST = gql`
-  mutation addPost($title: String!, $user: String!) {
-    addPost(title: $title, user: $user) {
-      _id
+  mutation addPost($commentText: String!) {
+    addPost(commentText: $commentText) {
+      postId
       title
       content
-      user {
-        _id
-        username
-      }
+      
       comments {
-        _id
+        CommentId
         commentText
-        createdAt
+        user {
+          _id
+          username
+        }
       }
+    }
+  }
+`;
+
+export const REMOVE_POST = gql`
+  mutation removePost($postId: String!) {
+    removePost(postId: $postId) {
+      postId
     }
   }
 `;
@@ -110,16 +82,14 @@ export const ADD_POST = gql`
 export const ADD_COMMENT = gql`
   mutation addComment($postId: ID!, $commentText: String!) {
     addComment(postId: $postId, commentText: $commentText) {
-      _id
-      content
-      user {
-        _id
-        username
-      }
+      postId
       comments {
-        _id
+        CommentId
         commentText
-        createdAt
+        user {
+          _id
+          username
+        }
       }
     }
   }
@@ -128,16 +98,9 @@ export const ADD_COMMENT = gql`
 export const REMOVE_COMMENT = gql`
   mutation removeComment($postId: ID!, $commentId: ID!) {
     removeComment(postId: $postId, commentId: $commentId) {
-      _id
-      content
-      user {
-        _id
-        username
-      }
+      postId
       comments {
-        _id
-        commentText
-        createdAt
+        CommentId
       }
     }
   }
