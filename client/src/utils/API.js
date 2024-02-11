@@ -43,12 +43,12 @@ import axios from 'axios';
 
 
 // Define the base URL for the BoardGameGeek API
-const BASE_URL = 'https://www.boardgamegeek.com/xmlapi2';
+const BASE_URL = "https://api.jikan.moe/v4/anime/${id}/full";
 
 // Function to fetch board game data by game ID
-export const fetchGameById = async (gameId) => {
+export const fetchAnimeById = async (Id) => {
   try {
-    const response = await axios.get(`${BASE_URL}/thing?id=${gameId}`);
+    const response = await axios.get(`${BASE_URL}/anime?id=${Id}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching game details:', error);
@@ -57,9 +57,9 @@ export const fetchGameById = async (gameId) => {
 };
 
 // Function to search for board games by name
-export const searchGamesByName = async (query) => {
+export const searchAnimeByName = async (query) => {
   try {
-    const response = await axios.get(`${BASE_URL}/search?type=boardgame&query=${query}`);
+    const response = await axios.get(`${BASE_URL}/search/anime?q=${query}`);
     return response.data;
   } catch (error) {
     console.error('Error searching for games:', error);
