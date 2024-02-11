@@ -1,18 +1,6 @@
-export const saveAuthToken = (token) => {
-  localStorage.setItem("auth_token", token);
-};
-
-export const getAuthToken = () => {
-  return localStorage.getItem("auth_token");
-};
-
-export const removeAuthToken = () => {
-  localStorage.removeItem("auth_token");
-};
-
 export const getSavedGameIds = () => {
   const savedGameIds = localStorage.getItem("saved_games")
-    ? JSON.parse(localStorage.getItem("saved_books"))
+    ? JSON.parse(localStorage.getItem("saved_games"))
     : [];
 
   return savedGameIds;
@@ -27,18 +15,52 @@ export const saveGameIds = (gameIdArr) => {
 };
 
 export const removeGameId = (gameId) => {
-  const savedGameIds = localStorage.getItem("saved_games")
-    ? JSON.parse(localStorage.getItem("saved_games"))
-    : null;
+  const savedGameIds = getSavedGameIds();
 
-  if (!savedGameIds) {
-    return false;
-  }
-
-  const updatedSavedGameIds = savedGameIds?.filter(
+  const updatedSavedGameIds = savedGameIds.filter(
     (savedGameId) => savedGameId !== gameId
   );
   localStorage.setItem("saved_games", JSON.stringify(updatedSavedGameIds));
 
   return true;
+};
+
+export const getSavedGameData = () => {
+  const savedGameData = localStorage.getItem("saved_game_data")
+    ? JSON.parse(localStorage.getItem("saved_game_data"))
+    : { wishlist: [], gamesOwned: [] };
+
+  return savedGameData;
+};
+
+export const saveGameData = (gameData) => {
+  localStorage.setItem("saved_game_data", JSON.stringify(gameData));
+};
+
+export const addToWishlist = (gameId) => {
+  const savedGameData = getSavedGameData();
+  savedGameData.wishlist.push(gameId);
+  saveGameData(savedGameData);
+};
+
+export const removeFromWishlist = (gameId) => {
+  const savedGameData = getSavedGameData();
+  savedGameData.wishlist = savedGameData.wishlist.filter(
+    (savedGameId) => savedGameId !== gameId
+  );
+  saveGameData(savedGameData);
+};
+
+export const addToGamesOwned = (gameId) => {
+  const savedGameData = getSavedGameData();
+  savedGameData.gamesOwned.push(gameId);
+  saveGameData(savedGameData);
+};
+
+export const removeFromGamesOwned = (gameId) => {
+  const savedGameData = getSavedGameData();
+  savedGameData.gamesOwned = savedGameData.gamesOwned.filter(
+    (savedGameId) => savedGameId !== gameId
+  );
+  saveGameData(savedGameData);
 };
