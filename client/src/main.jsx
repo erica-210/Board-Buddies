@@ -7,6 +7,7 @@ import SingleGame from './pages/SingleGame';
 import Profile from './pages/Profile';
 import SearchGames from './pages/SearchGames';
 import SinglePost from './pages/SinglePost';
+import Saved from './pages/SavedGames';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
       { path: "/search", element: <SearchGames /> },
       { path: "/boardgame/:id", element: <SingleGame /> },
       { path: "/post/:id", element: <SinglePost /> },
+      { path: "/saved", element: <Saved /> },
     ]
   },
 ]);
