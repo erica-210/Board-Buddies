@@ -20,7 +20,7 @@ function Login() {
       });
       const token = mutationResponse.data.login.token;
       Auth.login(token);
-      navigate("/profiles/username");
+      navigate("/profile");
     } catch (e) {
       console.log(e);
     }
