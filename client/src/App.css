@@ -1,3 +1,23 @@
-.sidenav {
-    height: 100%;  width: 25%;  position: fixed; z-index: 1; top: 0; left: 0; background-color:#232323; transition: .5s ease; overflow-x: hidden; padding-top: 20px; display: flex; flex-direction: column; align-items: center;
-}
+/* background for whole application */
+/* body {
+    display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Make sure the body fills the viewport height */
+    /* background: linear-gradient(to bottom, #aaf7a0, #377e39); 
+  } */ */
+
+  /* .content {
+    flex: 1; /* Allow the content to grow and fill the remaining space */
+  /* } */ */
+
+/* navbar */
+/* .sidenav {
+    height: 100%;  width: 25%;  position: fixed; z-index: 1; top: 0; left: 0; background-color:#0a2b0c; transition: .5s ease; overflow-x: hidden; padding-top: 20px; display: flex; flex-direction: column; align-items: center;
+} */
+
+/* footer */
+/* footer {
+    flex-shrink: 0; 
+    margin-top: auto; Push the footer to the bottom
+    
+  } */

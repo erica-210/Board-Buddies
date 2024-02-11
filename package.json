@@ -30,6 +30,7 @@
         "concurrently": "^8.2.0"
     },
     "dependencies": {
+        "antd": "^5.14.0",
         "eslint-config-prettier": "^9.1.0"
     }
 }
