@@ -7,7 +7,7 @@ import SingleGame from './pages/SingleGame';
 import Profile from './pages/Profile';
 import SearchGames from './pages/SearchGames';
 import SinglePost from './pages/SinglePost';
-import Saved from './pages/SavedGames';
+import Thread from './pages/Thread';
 
 const router = createBrowserRouter([
   {
@@ -16,11 +16,11 @@ const router = createBrowserRouter([
     errorElement: <h1 className='display-2'>Wrong page!</h1>,
     children: [
       { index: true, element: <Home /> },
-      { path: "/profiles/:username", element: <Profile /> },
+      { path: "/profile", element: <Profile /> },
       { path: "/search", element: <SearchGames /> },
       { path: "/boardgame/:id", element: <SingleGame /> },
       { path: "/post/:id", element: <SinglePost /> },
-      { path: "/saved", element: <Saved /> },
+      { path: "/thread", element: <Thread />},
     ]
   },
 ]);
