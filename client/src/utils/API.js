@@ -41,6 +41,7 @@
 
 import axios from 'axios';
 
+
 // Define the base URL for the BoardGameGeek API
 const BASE_URL = 'https://www.boardgamegeek.com/xmlapi2';
 
