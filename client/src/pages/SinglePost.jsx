@@ -1,10 +1,12 @@
 import React from 'react';
 
+import SinglePostCard from '../components/SinglePostCard';
+
 const SinglePost = () => {
   return (
     <div>
       <h1>Welcome to the Single Post Page</h1>
-      {/* Add your home page content here */}
+      <SinglePostCard />
     </div>
   );
 };
