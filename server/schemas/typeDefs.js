@@ -50,17 +50,17 @@ const typeDefs = gql`
   }
 
   type Post {
-    postId: ID!
+    _id: ID
     title: String!
     content: String!
-    user: User!
+    user: String
     comments: [Comment]
   }
 
   type Comment {
     CommentId: ID!
     commentText: String!
-    user: User!
+    user: String
     boardGame: BoardGame
     post: Post!
   }
@@ -86,7 +86,7 @@ const typeDefs = gql`
     addUser(username: String!, email: String!, password: String!): Auth
     saveAnime(animeData: ID!): User
     removeAnime(animeId: ID!): User
-    addPost(commentText: String!): Post
+    addPost(title: String!, content: String!): Post
     removePost(postId: String!): Post
     addComment(postId: ID!, commentText: String!): Post
     removeComment(postId: ID!, commentId: ID!): Post
