@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+
 
 import Auth from "../utils/auth";
 import { saveGameIds, getSavedGameIds } from "../utils/localStorage";
@@ -112,8 +112,9 @@ const SearchGames = () => {
             : "Search for a game to begin"}
         </h2>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {searchedGames && searchedGames.map((game) => {
-            return (
+  {console.log("Searched games:", searchedGames)}
+  {searchedGames && searchedGames.map((game) => { // Guard against searchedGames being null or undefined
+    return (
               <div key={game.gameId} style={{ width: "calc(33.33% - 1rem)", margin: "0.5rem" }}>
                 <div style={{ border: "1px solid black" }}>
                   {game.gameImage && (
