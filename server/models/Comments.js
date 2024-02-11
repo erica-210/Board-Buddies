@@ -5,10 +5,10 @@ const commentSchema = new Schema({
     type: String,
     required: true,
   },
-  gameName: {
-    type: String,
-    required: true,
-  },
+  // gameName: {
+  //   type: String,
+  //   required: true,
+  // },
   commentText: {
     type: String,
     required: true,
@@ -18,11 +18,11 @@ const commentSchema = new Schema({
     ref: "Post",
     required: true,
   },
-  boardGameId: {
-    type: Schema.Types.ObjectId,
-    ref: "BoardGame",
-    required: true,
-  },
+  // boardGameId: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "BoardGame",
+  //   required: true,
+  // },
 });
 
 const Comment = model("Comment", commentSchema);

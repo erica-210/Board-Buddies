@@ -1,7 +1,7 @@
 const { AuthenticationError } = require("apollo-server-express");
 const { BoardGames, User, Posts, Comments } = require("../models");
 const { signToken } = require("../utils/auth");
-const axios = require('axios');
+const axios = require("axios");
 
 const resolvers = {
   Query: {
@@ -22,16 +22,16 @@ const resolvers = {
     postById: async (parent, { _id }) => {
       return Posts.findOne({ _id });
     },
-    anime: async (parent, {id}) => {
+    anime: async (parent, { id }) => {
       const response = await axios.get(
         `https://api.jikan.moe/v4/anime/${id}/full`
-      )
+      );
       const animeData = response.data.data;
 
       const genres = animeData.genres.map((genre) => ({
         mal_id: genre.mal_id,
-        name: genre.name
-      }))
+        name: genre.name,
+      }));
       return {
         mal_id: animeData.mal_id,
         title: animeData.title,
@@ -39,8 +39,8 @@ const resolvers = {
         episodes: animeData.episodes,
         synopsis: animeData.synopsis,
         genres: genres,
-      }
-    }
+      };
+    },
   },
 
   Mutation: {
@@ -91,7 +91,7 @@ const resolvers = {
         // Update user's document to remove book from savedBooks array
         const updatedUser = await User.findByIdAndUpdate(
           context.user._id,
-          { $pull: { savedAnime: {mal_id: animeId } } },
+          { $pull: { savedAnime: { mal_id: animeId } } },
           { new: true }
         );
         return updatedUser;
@@ -100,16 +100,16 @@ const resolvers = {
       throw new AuthenticationError("Login required!");
     },
     // add a post
-    addPost: async (parent, { postData }, context) => {
+    addPost: async (parent, { title, content }, context) => {
       if (context.user) {
         const post = await Posts.create({
-          ...postData,
+          title,
+          content,
           username: context.user.username,
         });
-        await User.findByIdAndUpdate(
-          context.user._id,
-          { $addToSet: { posts: post._id } }
-        );
+        await User.findByIdAndUpdate(context.user._id, {
+          $addToSet: { posts: post._id },
+        });
         return post;
       }
       // Throw error if user is not authenticated
@@ -122,17 +122,16 @@ const resolvers = {
           _id: postId,
           username: context.user.username,
         });
-        await User.findByIdAndUpdate(
-          context.user._id,
-          { $pull: { posts: postId } }
-        );
+        await User.findByIdAndUpdate(context.user._id, {
+          $pull: { posts: postId },
+        });
         return post;
       }
       // Throw error if user is not authenticated
       throw new AuthenticationError("Login required!");
     },
     // add a comment
-    addComment: async (parent, { postId, commentText }, context) => {
+    addComment: async (parent, { commentId, commentText }, context) => {
       if (context.user) {
         const updatedPost = await Comments.findOneAndUpdate(
           { _id: postId },

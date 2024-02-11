@@ -19,24 +19,22 @@ const PostForm = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     console.log("Form submitted");
-   // Check if the user is logged in
-   if (!Auth.loggedIn()) {
-    console.error("User is not logged in. Please log in to post.");
-    return;
-  }
+    // Check if the user is logged in
+    if (!Auth.loggedIn()) {
+      console.error("User is not logged in. Please log in to post.");
+      return;
+    }
 
-// Inside your component:
-const userData = Auth.getProfile().data;
+    // Inside your component:
+    const userData = Auth.getProfile().data;
 
-// Example usage:
-console.log("User data:", userData);
+    // Example usage:
+    console.log("User data:", userData);
     try {
       const { data } = await addPost({
-       
         variables: {
           title: "New Post Title", // Add title field
-          commentText: postText, // Rename variable to commentText
-            
+          content: postText, // Rename variable to commentText
         },
       });
       console.log("Post added successfully:", data);
@@ -48,13 +46,16 @@ console.log("User data:", userData);
             commentText: postText,
           },
         });
-        console.log("Comment added successfully for post:", data.addPost.postId);
+        console.log(
+          "Comment added successfully for post:",
+          data.addPost.postId
+        );
       }
 
       setPostText("");
       setCharacterCount(0); // Reset character count after successful submission
     } catch (err) {
-        console.error("An error occurred while adding the post:", err.message);
+      console.error("An error occurred while adding the post:", err.message);
     }
   };
 
@@ -62,7 +63,7 @@ console.log("User data:", userData);
     const { name, value } = event.target;
 
     if (name === "postText" && value.length <= 280) {
-        console.log("Post text changed:", value);
+      console.log("Post text changed:", value);
       setPostText(value);
       setCharacterCount(value.length);
     }
@@ -106,7 +107,7 @@ console.log("User data:", userData);
               <button className="btn btn-primary btn-block py-3" type="submit">
                 Add Post
               </button>
-             </div>
+            </div>
             {(postError || commentError) && (
               <div className="col-12 my-3 bg-danger text-white p-3">
                 {postError ? postError.message : commentError.message}
