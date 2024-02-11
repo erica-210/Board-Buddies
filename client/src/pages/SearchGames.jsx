@@ -5,7 +5,7 @@ import Auth from "../utils/auth";
 import { saveGameIds, getSavedGameIds } from "../utils/localStorage";
 import { useMutation } from "@apollo/client";
 import { SAVE_BOARD_GAME } from "../utils/mutations";
-import { searchGamesByName, fetchGameById } from "../utils/API";
+import { searchGamesByName } from "../utils/API";
 
 const SearchGames = () => {
   const [searchedGames, setSearchedGames] = useState([]);

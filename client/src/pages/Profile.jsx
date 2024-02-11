@@ -1,13 +1,15 @@
-import React from 'react';
+import React from "react";
 
-import WishList from '../components/WishList';
+import WishList from "../components/WishList";
 // import CommentForm from '../components/CommentForm';
-import PostForm from '../components/PostForm';
+import PostForm from "../components/PostForm";
+
 
 const Profile = () => {
   return (
-    <div>
+    <div >
       <h1>Welcome to the Profile Page</h1>
+      
       <WishList />
       {/* <CommentForm /> */}
       <PostForm />
