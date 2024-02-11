@@ -10,35 +10,35 @@ export const removeAuthToken = () => {
   localStorage.removeItem("auth_token");
 };
 
-export const getSavedGameIds = () => {
-  const savedGameIds = localStorage.getItem("saved_games")
+export const getSavedAnimeIds = () => {
+  const savedAnimeIds = localStorage.getItem("saved_anime")
     ? JSON.parse(localStorage.getItem("saved_books"))
     : [];
 
-  return savedGameIds;
+  return savedAnimeIds;
 };
 
-export const saveGameIds = (gameIdArr) => {
-  if (gameIdArr.length) {
-    localStorage.setItem("saved_games", JSON.stringify(gameIdArr));
+export const saveAnimeIds = (animeIdArr) => {
+  if (animeIdArr.length) {
+    localStorage.setItem("saved_anime", JSON.stringify(animeIdArr));
   } else {
-    localStorage.removeItem("saved_games");
+    localStorage.removeItem("saved_anime");
   }
 };
 
-export const removeGameId = (gameId) => {
-  const savedGameIds = localStorage.getItem("saved_games")
-    ? JSON.parse(localStorage.getItem("saved_games"))
+export const removeAnimeId = (animeId) => {
+  const savedAnimeIds = localStorage.getItem("saved_anime")
+    ? JSON.parse(localStorage.getItem("saved_anime"))
     : null;
 
-  if (!savedGameIds) {
+  if (!savedAnimeIds) {
     return false;
   }
 
-  const updatedSavedGameIds = savedGameIds?.filter(
-    (savedGameId) => savedGameId !== gameId
+  const updatedSavedAnimeIds = savedAnimeIds?.filter(
+    (savedAnimeId) => savedAnimeId !== animeId
   );
-  localStorage.setItem("saved_games", JSON.stringify(updatedSavedGameIds));
+  localStorage.setItem("saved_anime", JSON.stringify(updatedSavedAnimeIds));
 
   return true;
 };

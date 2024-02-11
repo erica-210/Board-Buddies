@@ -1,25 +1,17 @@
 const { AuthenticationError } = require("apollo-server-express");
 const { BoardGames, User, Posts, Comments } = require("../models");
 const { signToken } = require("../utils/auth");
+const axios = require('axios');
 
 const resolvers = {
   Query: {
     // get all users
     users: async () => {
-      return User.find().populate("savedGames");
+      return User.find().populate("savedAnime");
     },
     // get a user by username
     user: async (parent, { username }) => {
-      return User.findOne({ username }).populate("savedGames");
-    },
-    // get all board games
-    boardGames: async (parent, { username }) => {
-      const params = username ? { username } : {};
-      return BoardGames.find(params).sort({ createdAt: -1 });
-    },
-    // get a board game by id
-    boardGameById: async (parent, { _id }) => {
-      return BoardGames.findOne({ _id });
+      return User.findOne({ username }).populate("savedAnime");
     },
     // get all posts
     posts: async (parent, { username }) => {
@@ -30,6 +22,25 @@ const resolvers = {
     postById: async (parent, { _id }) => {
       return Posts.findOne({ _id });
     },
+    anime: async (parent, {id}) => {
+      const response = await axios.get(
+        `https://api.jikan.moe/v4/anime/${id}/full`
+      )
+      const animeData = response.data.data;
+
+      const genres = animeData.genres.map((genre) => ({
+        mal_id: genre.mal_id,
+        name: genre.name
+      }))
+      return {
+        mal_id: animeData.mal_id,
+        title: animeData.title,
+        images: animeData.images,
+        episodes: animeData.episodes,
+        synopsis: animeData.synopsis,
+        genres: genres,
+      }
+    }
   },
 
   Mutation: {
@@ -62,11 +73,11 @@ const resolvers = {
       return { token, user };
     },
     // add a board game
-    saveBoardGame: async (parent, { gameData }, context) => {
+    saveAnime: async (parent, { animeData }, context) => {
       if (context.user) {
         const updatedUser = await User.findByIdAndUpdate(
           context.user._id,
-          { $addToSet: { savedGames: gameData } },
+          { $addToSet: { savedAnime: animeData } },
           { new: true }
         );
         return updatedUser;
@@ -75,12 +86,12 @@ const resolvers = {
       throw new AuthenticationError("Login required!");
     },
     // remove a board game
-    removeBoardGame: async (parent, { gameId }, context) => {
+    removeAnime: async (parent, { animeId }, context) => {
       if (context.user) {
         // Update user's document to remove book from savedBooks array
         const updatedUser = await User.findByIdAndUpdate(
           context.user._id,
-          { $pull: { savedGames: gameId } },
+          { $pull: { savedAnime: {mal_id: animeId } } },
           { new: true }
         );
         return updatedUser;

@@ -2,21 +2,21 @@ import React, { useState, useEffect } from "react";
 
 
 import Auth from "../utils/auth";
-import { saveGameIds, getSavedGameIds } from "../utils/localStorage";
+import { saveAnimeIds, getSavedAnimeIds } from "../utils/localStorage";
 import { useMutation } from "@apollo/client";
-import { SAVE_BOARD_GAME } from "../utils/mutations";
-import { searchGamesByName } from "../utils/API";
+import { SAVE_ANIME } from "../utils/mutations";
+import { searchAnimeByName } from "../utils/API";
 
-const SearchGames = () => {
-  const [searchedGames, setSearchedGames] = useState([]);
+const SearchAnimes = () => {
+  const [searchedAnimes, setSearchedAnimes] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-  const [savedGameIds, setSavedGameIds] = useState(getSavedGameIds());
+  const [savedAnimeIds, setSavedAnimeIds] = useState(getSavedAnimeIds());
 
   useEffect(() => {
-    return () => saveGameIds(savedGameIds);
-  }, [savedGameIds]);
+    return () => saveAnimeIds(savedAnimeIds);
+  }, [savedAnimeIds]);
 
-  const [saveGameMutation] = useMutation(SAVE_BOARD_GAME);
+  const [saveAnimeMutation] = useMutation(SAVE_ANIME);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -27,56 +27,56 @@ const SearchGames = () => {
     }
   
     try {
-      // Search for games by name using the API function
-      const gameData = await searchGamesByName(searchInput);
+      // Search for Animes by name using the API function
+      const animeData = await searchAnimeByName(searchInput);
 
-      console.log("Game data:", gameData);
+      console.log("Anime data:", animeData);
   
-      setSearchedGames(gameData);
+      setSearchedAnimes(animeData);
       setSearchInput("");
     } catch (err) {
-      console.error("An error occurred while searching for games:", err);
+      console.error("An error occurred while searching for Animes:", err);
     }
   };
   
-  const handleSaveGame = async (gameId) => {
-    // find the game in `searchedGames` state by the matching id
-    const gameToSave = searchedGames.find((game) => game.gameId === gameId);
+  const handleSaveAnime = async (AnimeId) => {
+    // find the Anime in `searchedAnimes` state by the matching id
+    const AnimeToSave = searchedAnimes.find((anime) => anime.animeId === AnimeId);
   
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
   
     if (!token) {
-      console.error("User is not logged in. Unable to save game.");
+      console.error("User is not logged in. Unable to save anime.");
       return false;
     }
   
     try {
-      // Execute the SAVE_GAMEmutation
-      const { data } = await saveGameMutation({
-        variables: { game: gameToSave },
+      // Execute the SAVE_Animemutation
+      const { data } = await saveAnimeMutation({
+        variables: { Anime: AnimeToSave },
       });
   
       if (!data) {
         throw new Error("something went wrong!");
       }
   
-      console.log("Game saved successfully:", gameToSave);
+      console.log("Anime saved successfully:", AnimeToSave);
   
-      // if book successfully saves to user's account, save game id to state
-      setSavedGameIds([...savedGameIds, gameToSave.gameId]);
+      // if book successfully saves to user's account, save Anime id to state
+      setSavedAnimeIds([...savedAnimeIds, AnimeToSave.AnimeId]);
     } catch (err) {
-      console.error("An error occurred while saving the game:", err);
+      console.error("An error occurred while saving the Anime:", err);
     }
   };
   
 
   return (
     <div>
-      <h1>Welcome to the Search Games Page</h1>
+      <h1>Welcome to the Search Animes Page</h1>
       <div style={{ color: "white", backgroundColor: "black", padding: "1rem" }}>
         <div>
-          <h1>Search for Games!</h1>
+          <h1>Search for Animes!</h1>
           <form onSubmit={handleFormSubmit}>
             <div style={{ display: "flex", alignItems: "center" }}>
               <input
@@ -85,7 +85,7 @@ const SearchGames = () => {
                 onChange={(e) => setSearchInput(e.target.value)}
                 type="text"
                 style={{ width: "80%", padding: "0.5rem", fontSize: "1.25rem" }}
-                placeholder="Search for a game"
+                placeholder="Search for a Anime"
               />
               <button
                 type="submit"
@@ -107,34 +107,34 @@ const SearchGames = () => {
   
       <div>
         <h2 style={{ paddingTop: "1.25rem" }}>
-          {searchedGames.length
-            ? `Viewing ${searchedGames.length} results:`
-            : "Search for a game to begin"}
+          {searchedAnimes.length
+            ? `Viewing ${searchedAnimes.length} results:`
+            : "Search for a Anime to begin"}
         </h2>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
-  {console.log("Searched games:", searchedGames)}
-  {searchedGames && searchedGames.map((game) => { // Guard against searchedGames being null or undefined
+  {console.log("Searched Animes:", searchedAnimes)}
+  {searchedAnimes && searchedAnimes.map((anime) => { // Guard against searchedAnimes being null or undefined
     return (
-              <div key={game.gameId} style={{ width: "calc(33.33% - 1rem)", margin: "0.5rem" }}>
+              <div key={anime.animeId} style={{ width: "calc(33.33% - 1rem)", margin: "0.5rem" }}>
                 <div style={{ border: "1px solid black" }}>
-                  {game.gameImage && (
+                  {anime.animeImage && (
                     <img
-                      src={game.gameImage}
-                      alt={`The cover for ${game.gameName}`}
+                      src={anime.animeImage}
+                      alt={`The cover for ${anime.animeName}`}
                       style={{ width: "100%", height: "auto" }}
                     />
                   )}
                   <div style={{ padding: "1rem" }}>
-                    <h3>{game.gameName}</h3>
+                    <h3>{anime.animeName}</h3>
                     <p>
-                      Creators: {game.creators}<br />
-                      Category: {game.category}<br />
-                      Players: {game.players}
+                      Creators: {anime.creators}<br />
+                      Category: {anime.category}<br />
+                      Players: {anime.players}
                     </p>
-                    <p>{game.description}</p>
+                    <p>{anime.description}</p>
                     {Auth.loggedIn() && (
                       <button
-                        disabled={savedGameIds?.some((savedGameId) => savedGameId === game.gameId)}
+                        disabled={savedAnimeIds?.some((savedAnimeId) => savedAnimeId === anime.animeId)}
                         style={{
                           width: "100%",
                           padding: "0.5rem",
@@ -144,11 +144,11 @@ const SearchGames = () => {
                           border: "none",
                           cursor: "pointer",
                         }}
-                        onClick={() => handleSaveGame(game.gameId)}
+                        onClick={() => handleSaveAnime(anime.animeId)}
                       >
-                        {savedGameIds?.some((savedGameId) => savedGameId === game.gameId)
-                          ? "This game has already been saved!"
-                          : "Save this Game!"}
+                        {savedAnimeIds?.some((savedAnimeId) => savedAnimeId === anime.animeId)
+                          ? "This Anime has already been saved!"
+                          : "Save this Anime!"}
                       </button>
                     )}
                   </div>
@@ -162,4 +162,4 @@ const SearchGames = () => {
   );
 };
 
-export default SearchGames;
+export default SearchAnimes;
