@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { ADD_POST } from "../../utils/mutations";
+import { ADD_POST, ADD_COMMENT } from "../../utils/mutations";
 import { QUERY_POSTS, GET_ME } from "../../utils/queries";
 import Auth from "../../utils/auth";
 
@@ -8,7 +8,11 @@ const PostForm = () => {
   const [postText, setPostText] = useState("");
   const [characterCount, setCharacterCount] = useState(0);
 
-  const [addPost, { error }] = useMutation(ADD_POST, {
+  const [addPost, { error: postError }] = useMutation(ADD_POST, {
+    refetchQueries: [QUERY_POSTS, "posts", GET_ME, "me"],
+  });
+
+  const [addComment, { error: commentError }] = useMutation(ADD_COMMENT, {
     refetchQueries: [QUERY_POSTS, "posts", GET_ME, "me"],
   });
 
@@ -21,8 +25,11 @@ const PostForm = () => {
     return;
   }
 
- const user = Auth.getProfile().data.profileData; // Get user data
- console.log("User:", user); // Check if user data is retrieved
+// Inside your component:
+const userData = Auth.getProfile().data;
+
+// Example usage:
+console.log("User data:", userData);
     try {
       const { data } = await addPost({
        
@@ -33,6 +40,16 @@ const PostForm = () => {
         },
       });
       console.log("Post added successfully:", data);
+
+      if (postText) {
+        await addComment({
+          variables: {
+            postId: data.addPost.postId,
+            commentText: postText,
+          },
+        });
+        console.log("Comment added successfully for post:", data.addPost.postId);
+      }
 
       setPostText("");
       setCharacterCount(0); // Reset character count after successful submission
@@ -65,7 +82,7 @@ const PostForm = () => {
         <>
           <p
             className={`m-0 ${
-              characterCount === 280 || error ? "text-danger" : ""
+              characterCount === 280 || postError ? "text-danger" : ""
             }`}
           >
             Character Count: {characterCount}/280
@@ -89,10 +106,10 @@ const PostForm = () => {
               <button className="btn btn-primary btn-block py-3" type="submit">
                 Add Post
               </button>
-            </div>
-            {error && (
+             </div>
+            {(postError || commentError) && (
               <div className="col-12 my-3 bg-danger text-white p-3">
-                {error.message}
+                {postError ? postError.message : commentError.message}
               </div>
             )}
           </form>

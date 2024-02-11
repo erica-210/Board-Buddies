@@ -1,17 +1,15 @@
 import React from "react";
 
 import WishList from "../components/WishList";
-// import CommentForm from '../components/CommentForm';
 import PostForm from "../components/PostForm";
-
+import GamesOwned from "../components/GamesOwned";
 
 const Profile = () => {
   return (
-    <div >
+    <div>
       <h1>Welcome to the Profile Page</h1>
-      
+      <GamesOwned />
       <WishList />
-      {/* <CommentForm /> */}
       <PostForm />
     </div>
   );
