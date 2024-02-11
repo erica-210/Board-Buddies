@@ -2,21 +2,21 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Auth from "../../utils/auth";
 
-import { saveGameIds, getSavedGameIds } from "../../utils/localStorage";
+import { saveAnimeIds, getSavedAnimeIds } from "../../utils/localStorage";
 import { useMutation } from "@apollo/client";
-import { SAVE_BOARD_GAME } from "../../utils/mutations";
-import { searchGamesByName } from "../../utils/API";
+import { SAVE_ANIME } from "../../utils/mutations";
+import { searchAnimeByName } from "../../utils/API";
 
-const SearchGamesForm = () => {
-  const [searchedGames, setSearchedGames] = useState([]);
+const SearchAnimeForm = () => {
+  const [searchedAnimes, setSearchedAnimes] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-  const [savedGameIds, setSavedGameIds] = useState(getSavedGameIds());
+  const [savedAnimeIds, setSavedAnimeIds] = useState(getSavedAnimeIds());
 
   useEffect(() => {
-    return () => saveGameIds(savedGameIds);
-  }, [savedGameIds]);
+    return () => saveAnimeIds(savedAnimeIds);
+  }, [savedAnimeIds]);
 
-  const [saveGameMutation] = useMutation(SAVE_BOARD_GAME);
+  const [saveAnimeMutation] = useMutation(SAVE_ANIME);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -27,46 +27,48 @@ const SearchGamesForm = () => {
     }
 
     try {
-      // Search for games by name using the API function
-      const gameData = await searchGamesByName(searchInput);
+      // Search for anime by name using the API function
+      const animeData = await searchAnimeByName(searchInput);
 
-      console.log("Game data:", gameData);
+      console.log("Anime data:", animeData);
 
-      setSearchedGames(gameData);
+      setSearchedAnimes(animeData);
       setSearchInput("");
     } catch (err) {
-      console.error("An error occurred while searching for games:", err);
+      console.error("An error occurred while searching for animes:", err);
     }
   };
 
-  const handleSaveGame = async (gameId) => {
-    // find the game in `searchedGames` state by the matching id
-    const gameToSave = searchedGames.find((game) => game.gameId === gameId);
+  const handleSaveAnime = async (animeId) => {
+    // find the anime in `searchedAnimes` state by the matching id
+    const animeToSave = searchedAnimes.find(
+      (anime) => anime.animeId === animeId
+    );
 
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
-      console.error("User is not logged in. Unable to save game.");
+      console.error("User is not logged in. Unable to save anime.");
       return false;
     }
 
     try {
-      // Execute the SAVE_GAMEmutation
-      const { data } = await saveGameMutation({
-        variables: { game: gameToSave },
+      // Execute the SAVE_animemutation
+      const { data } = await saveAnimeMutation({
+        variables: { anime: animeToSave },
       });
 
       if (!data) {
         throw new Error("something went wrong!");
       }
 
-      console.log("Game saved successfully:", gameToSave);
+      console.log("anime saved successfully:", animeToSave);
 
-      // if book successfully saves to user's account, save game id to state
-      setSavedGameIds([...savedGameIds, gameToSave.gameId]);
+      // if book successfully saves to user's account, save anime id to state
+      setSavedAnimeIds([...savedAnimeIds, animeToSave.animeId]);
     } catch (err) {
-      console.error("An error occurred while saving the game:", err);
+      console.error("An error occurred while saving the anime:", err);
     }
   };
 
@@ -76,7 +78,7 @@ const SearchGamesForm = () => {
         style={{ color: "white", backgroundColor: "black", padding: "1rem" }}
       >
         <div>
-          <h1>Search for Games!</h1>
+          <h1>Search for a new anime!</h1>
           <form onSubmit={handleFormSubmit}>
             <div style={{ display: "flex", alignItems: "center" }}>
               <input
@@ -85,7 +87,7 @@ const SearchGamesForm = () => {
                 onChange={(e) => setSearchInput(e.target.value)}
                 type="text"
                 style={{ width: "80%", padding: "0.5rem", fontSize: "1.25rem" }}
-                placeholder="Search for a game"
+                placeholder="Search for a new anime"
               />
               <button
                 type="submit"
@@ -107,40 +109,39 @@ const SearchGamesForm = () => {
 
       <div>
         <h2 style={{ paddingTop: "1.25rem" }}>
-          {searchedGames.length
-            ? `Viewing ${searchedGames.length} results:`
-            : "Search for a game to begin"}
+          {searchedAnimes.length
+            ? `Viewing ${searchedAnimes.length} results:`
+            : "Search for a anime to begin"}
         </h2>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
-          {console.log("Searched games:", searchedGames)}
-          {searchedGames &&
-            searchedGames.map((game) => {
-              // Guard against searchedGames being null or undefined
+          {console.log("Searched animes:", searchedAnimes)}
+          {searchedAnimes &&
+            searchedAnimes.map((anime) => {
+              // Guard against searchedAnimes being null or undefined
               return (
                 <div
-                  key={game.gameId}
+                  key={anime.mal_id}
                   style={{ width: "calc(33.33% - 1rem)", margin: "0.5rem" }}
                 >
                   <div style={{ border: "1px solid black" }}>
-                    {game.gameImage && (
+                    {anime.images && anime.images.jpg && (
                       <img
-                        src={game.gameImage}
-                        alt={`The cover for ${game.gameName}`}
+                        src={anime.images.jpg.image_url}
+                        alt={`The cover for ${anime.title}`}
                         style={{ width: "100%", height: "auto" }}
                       />
                     )}
                     <div style={{ padding: "1rem" }}>
-                      <h3>{game.gameName}</h3>
+                      <h3>{anime.title}</h3>
                       <p>
-                        Creators: {game.creators}
+                        Episodes: {anime.episodes}
                         <br />
-                        Category: {game.category}
-                        <br />
-                        Players: {game.players}
+                        Genres:{" "}
+                        {anime.genres.map((genre) => genre.name).join(", ")}
                       </p>
-                      <p>Description: {game.description}</p>
+                      <p>Synopsis: {anime.synopsis}</p>
                       {Auth.loggedIn() && (
-                        <Link to={`/boardgame/${game.gameId}`}>
+                        <Link to={`/anime/${anime.mal_id}`}>
                           <button
                             style={{
                               width: "100%",
@@ -151,9 +152,9 @@ const SearchGamesForm = () => {
                               border: "none",
                               cursor: "pointer",
                             }}
-                            onClick={() => handleSaveGame(game.gameId)} // Add this onClick handler
+                            onClick={() => handleSaveAnime(anime.mal_id)}
                           >
-                            View Game
+                            View Anime
                           </button>
                         </Link>
                       )}
@@ -168,4 +169,4 @@ const SearchGamesForm = () => {
   );
 };
 
-export default SearchGamesForm;
+export default SearchAnimeForm;

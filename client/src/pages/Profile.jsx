@@ -1,16 +1,16 @@
 import React from "react";
 
-import WishList from "../components/WishList";
+import AnimeWatched from "../components/AnimeWatched";
 import PostForm from "../components/PostForm";
-// import GamesOwned from "../components/GamesOwned";
+import AnimeToWatch from "../components/AnimeToWatch";
 
 const Profile = () => {
   return (
     <div>
-      <h1>Welcome to the Profile Page</h1>
-      {/* <GamesOwned /> */}
-      <WishList />
+      <h1>Welcome to your Profile Page</h1>
       <PostForm />
+      <AnimeWatched />
+      <AnimeToWatch/>
     </div>
   );
 };
