@@ -1,19 +1,7 @@
 
-export const saveAuthToken = (token) => {
-  localStorage.setItem("auth_token", token);
-};
-
-export const getAuthToken = () => {
-  return localStorage.getItem("auth_token");
-};
-
-export const removeAuthToken = () => {
-  localStorage.removeItem("auth_token");
-};
-
 export const getSavedAnimeIds = () => {
   const savedAnimeIds = localStorage.getItem("saved_anime")
-    ? JSON.parse(localStorage.getItem("saved_books"))
+    ? JSON.parse(localStorage.getItem("saved_anime"))
 
     : [];
 
@@ -46,4 +34,42 @@ export const removeAnimeId = (animeId) => {
   return true;
 };
 
+export const getSavedAnimeData = () => {
+  const savedAnimeData = localStorage.getItem("saved_anime_data")
+  ? JSON.parse(localStorage.getItem("saved_anime_data"))
+  : { watched: [], planToWatch: [] };
 
+  return savedAnimeData;
+};
+
+export const saveAnimeData = (animeData) => {
+  localStorage.setItem("saved_anime_data", JSON.stringify(animeData));
+};
+
+export const addToWatched = (animeId) => {
+  const savedAnimeData = getSavedAnimeData();
+  savedAnimeData.watched.push(animeId);
+  saveAnimeData(savedAnimeData);
+};
+
+export const removeFromWatched = (animeId) => {
+  const savedAnimeData = getSavedAnimeData();
+  savedAnimeData.watched = savedAnimeData.watched.filter(
+    (savedAnimeId) => savedAnimeId !== animeId
+  );
+  saveAnimeData(savedAnimeData);
+};
+
+export const addToPlanToWatch = (animeId) => {
+  const savedAnimeData = getSavedAnimeData();
+  savedAnimeData.planToWatch.push(animeId);
+  saveAnimeData(savedAnimeData);
+};
+
+export const removeFromPlanToWatch = (animeId) => {
+  const savedAnimeData = getSavedAnimeData();
+  savedAnimeData.planToWatch = savedAnimeData.planToWatch.filter(
+    (savedAnimeId) => savedAnimeId !== animeId
+  );
+  saveAnimeData(savedAnimeData);
+};

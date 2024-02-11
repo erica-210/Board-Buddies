@@ -105,36 +105,28 @@ export const GET_POST_BY_ID = gql`
   }
 `;
 
-export const GET_BOARD_GAMES = gql`
-  query boardGames($username: String) {
-    boardGames(username: $username) {
-      gameId
-      gameName
-      creators
-      category
-      players
-      playTime
-      recommendedAge
-      description
-      gameImage
-      gamelink
+export const GET_ANIMES = gql`
+  query anime($username: String) {
+    anime(username: $username) {
+      mal_id
+      title
+      images
+      episodes
+      synopsis
+      genres
     }
   }
 `;
 
-export const GET_BOARD_GAME_BY_ID = gql`
-  query boardGameById($gameId: ID!) {
-    boardGameById(gameId: $gameId) {
-      gameId
-      gameName
-      creators
-      category
-      players
-      playTime
-      recommendedAge
-      description
-      gameImage
-      gamelink
+export const GET_ANIME_BY_ID = gql`
+  query animeById($animeId: ID!) {
+    animeById(animeId: $animeId) {
+      mal_id
+      title
+      images
+      episodes
+      synopsis
+      genres
     }
   }
 `;

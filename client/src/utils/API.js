@@ -42,7 +42,7 @@
 import axios from 'axios';
 
 
-// Define the base URL for the BoardGameGeek API
+// Define the base URL for the Anime API
 const BASE_URL = "https://api.jikan.moe/v4/anime/${id}/full";
 
 // Function to fetch board game data by game ID
@@ -56,7 +56,7 @@ export const fetchAnimeById = async (Id) => {
   }
 };
 
-// Function to search for board games by name
+// Function to search for anime by name
 export const searchAnimeByName = async (query) => {
   try {
     const response = await axios.get(`${BASE_URL}/search/anime?q=${query}`);

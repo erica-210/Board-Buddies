@@ -7,7 +7,7 @@ import Signup from '../components/SignupForm/index';
 const Home = () => {
   return (
     <div>
-      <h1>Welcome to the board game discovery hub!</h1>
+      <h1>Welcome to the anime discovery hub!</h1>
       <Login />
       <Signup />
     </div>
