@@ -9,16 +9,16 @@ const postSchema = new Schema({
     type: String,
     required: true,
   },
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
+  // user: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "User",
+  //   required: true,
+  // },
   comments: [
     {
       type: Schema.Types.ObjectId,
       ref: "Comment",
-      required: true,
+      // required: true,
     },
   ],
 });

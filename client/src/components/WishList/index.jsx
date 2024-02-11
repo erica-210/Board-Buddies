@@ -1,56 +1,52 @@
-import React, { useState, useEffect } from "react";
-import { getSavedGameIds, saveGameIds } from "../../utils/localStorage";
+
+import React, { useState, useEffect } from 'react';
+import { getSavedAnimeIds, saveAnimeIds } from '../../utils/localStorage';
+
 
 const Wishlist = () => {
-  // State to store the list of games in the wishlist
+  // State to store the list of Animes in the wishlist
   const [wishlist, setWishlist] = useState([]);
 
-  // State to store the selected game in the dropdown
-  const [selectedGameId, setSelectedGameId] = useState("");
+  // State to store the selected Anime in the dropdown
+
+  const [selectedAnimeId, setselectedAnimeId] = useState('');
 
   // Load wishlist from local storage on component mount
   useEffect(() => {
-    const storedWishlist = getSavedGameIds();
-    console.log("Stored game IDs:", storedWishlist);
-    setWishlist(storedWishlist);
+    const storedAnimeIds = getSavedAnimeIds();
+    setWishlist(storedAnimeIds);
   }, []);
 
-  // Function to handle removing a game from the wishlist
-  const handleRemoveGame = (gameId) => {
-    const updatedWishlist = wishlist.filter(
-      (savedGameId) => savedGameId !== gameId
-    );
-    console.log("Updated wishlist after removal:", updatedWishlist);
+  // Function to handle removing a Anime from the wishlist
+  const handleRemoveAnime = (animeId) => {
+    const updatedWishlist = wishlist.filter((savedAnimeId) => savedAnimeId !== animeId);
+
     setWishlist(updatedWishlist);
-    saveGameIds(updatedWishlist);
+    saveAnimeIds(updatedWishlist);
   };
 
-  // Log selected game ID when it changes
+  // Log selected Anime ID when it changes
   useEffect(() => {
-    console.log("Selected game ID:", selectedGameId);
-  }, [selectedGameId]);
+    console.log("Selected Anime ID:", selectedAnimeId);
+  }, [selectedAnimeId]);
 
   return (
     <div>
-      <h2>Saved Games</h2>
-      <select
-        value={selectedGameId}
-        onChange={(e) => setSelectedGameId(e.target.value)}
-      >
-        <option value="">Select a game</option>
-        {/* Map over wishlist to generate options */}
-        {wishlist.map((gameId, index) => (
-          <option key={index} value={gameId}>
-            {gameId}
-          </option>
-        ))}
+
+      <h2>Wishlist</h2>
+      <select value={selectedAnimeId} onChange={e => setselectedAnimeId(e.target.value)}>
+        <option value="">Select a Anime</option>
+        <option value="animeId1">Anime 1</option>
+        <option value="amnieId2">Anime 2</option>
+        {/* Add more options for additional Animes */}
+
       </select>
 
       <ul>
-        {wishlist.map((gameId, index) => (
+        {wishlist.map((animeId, index) => (
           <li key={index}>
-            {gameId} {/* Display game information here */}
-            <button onClick={() => handleRemoveGame(gameId)}>Remove</button>
+            {animeId} {/* Display Anime information here */}
+            <button onClick={() => handleRemoveAnime(animeId)}>Remove</button>
           </li>
         ))}
       </ul>

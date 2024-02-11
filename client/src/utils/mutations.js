@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const LOGIN = gql`
   mutation login($email: String!, $password: String!) {
@@ -26,45 +26,79 @@ export const ADD_USER = gql`
   }
 `;
 
-export const SAVE_BOARD_GAME = gql`
-  mutation saveBoardGame($gameData: ID!) {
-    saveBoardGame(gameData: $gameData) {
+export const SAVE_ANIME = gql`
+  mutation saveAnime($animeData: AnimeInput!) {
+    saveAnime(animeData: $animeData) {
       _id
       username
-      savedGames {
-        gameId
-        gameName
+      savedAnime {
+        mal_id
+        title
+        images {
+          jpg {
+            image_url
+            small_image_url
+            large_image_url
+          }
+          webp {
+            image_url
+            small_image_url
+            large_image_url
+          }
+        }
+        episodes
+        synopsis
+        genres {
+          mal_id
+          name
+        }
       }
     }
   }
 `;
 
-export const REMOVE_BOARD_GAME = gql`
-  mutation removeBoardGame($gameId: ID!) {
-    removeBoardGame(gameId: $gameId) {
-      _id
-      username
-      savedGames {
-        gameId
-        gameName
+export const REMOVE_ANIME = gql`
+  mutation removeAnime($animeId: ID!) {
+    removeAnime(animeId: $animeId) {
+      mal_id
+      title
+      images {
+        jpg {
+          image_url
+          small_image_url
+          large_image_url
+        }
+        webp {
+          image_url
+          small_image_url
+          large_image_url
+        }
+      }
+      episodes
+      synopsis
+      genres {
+        mal_id
+        name
       }
     }
   }
 `;
 
 export const ADD_POST = gql`
-  mutation addPost($commentText: String!) {
-    addPost(commentText: $commentText) {
-      postId
+  mutation AddPost($title: String!, $content: String!) {
+    addPost(title: $title, content: $content) {
+      _id
+      user
       title
       content
-      
       comments {
         CommentId
         commentText
         user {
           _id
-          username
+        }
+        post {
+          _id
         }
       }
     }
