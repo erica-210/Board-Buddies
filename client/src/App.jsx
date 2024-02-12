@@ -41,7 +41,7 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout style={{ minHeight: '100vh'}}>
         <Sider
           breakpoint="lg"
           collapsedWidth="0"
@@ -70,10 +70,10 @@ function App() {
             </Menu.Item>
           </Menu>
         </Sider>
-        <Layout>
+        <Layout className="body">
           <Header />
-          <Layout.Content style={{ margin: '24px 16px 0', minHeight: 'calc(100vh - 64px)' }}> {/* Adjust the height to fill the remaining space */}
-            <div style={{ padding: 24, background: '#fff', minHeight: '100%' }}>
+          <Layout.Content style={{ margin: '24px 16px 0' }} className="outlet"> 
+            <div style={{ padding: 24, background: '#bae0ff', minHeight: '100%' }}>
               <Outlet />
             </div>
           </Layout.Content>
