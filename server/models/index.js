@@ -1,6 +1,7 @@
 const User = require("./User");
-const BoardGames = require("./BoardGames");
+const Anime = require("./Anime");
 const Posts = require("./Posts");
 const Comments = require("./Comments");
+const Genre = require("./Genre");
 
-module.exports = { User, BoardGames, Posts, Comments };
+module.exports = { User, Anime, Posts, Comments, Genre };

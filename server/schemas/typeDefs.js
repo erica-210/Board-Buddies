@@ -5,10 +5,9 @@ const typeDefs = gql`
     _id: ID!
     username: String!
     email: String!
-    gameCount: Int
-    savedGames: [BoardGame]
-    post: [Post]
-    comment: [Comment]
+    savedAnime: [Anime]!
+    post: [Post]!
+    comment: [Comment]!
   }
 
   type Anime {
@@ -36,32 +35,18 @@ const typeDefs = gql`
     name: String
   }
 
-  type BoardGame {
-    gameId: ID!
-    gameName: String!
-    creators: [String]
-    category: String
-    players: Int
-    playTime: Int
-    recommendedAge: Int
-    description: String
-    gameImage: String
-    gamelink: String
-  }
-
   type Post {
-    _id: ID
+    _id: ID!
     title: String!
     content: String!
-    user: String
-    comments: [Comment]
+    user: String!
+    comment: [Comment]
   }
 
   type Comment {
-    CommentId: ID!
-    commentText: String!
-    user: String
-    boardGame: BoardGame
+    _id: ID!
+    content: String!
+    user: String!
     post: Post!
   }
 
@@ -75,8 +60,6 @@ const typeDefs = gql`
     users: [User]
     user(username: String!): User
     anime(id: ID!): Anime
-    boardGames(username: String): [BoardGame]
-    boardGameById(gameId: ID!): BoardGame
     posts(username: String): [Post]
     postById(postId: ID!): Post
   }
@@ -84,10 +67,10 @@ const typeDefs = gql`
   type Mutation {
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
-    saveAnime(animeData: ID!): User
+    saveAnime(animeId: ID!): User
     removeAnime(animeId: ID!): User
     addPost(title: String!, content: String!): Post
-    removePost(postId: String!): Post
+    removePost(postId: ID!): Post
     addComment(postId: ID!, commentText: String!): Post
     removeComment(postId: ID!, commentId: ID!): Post
   }

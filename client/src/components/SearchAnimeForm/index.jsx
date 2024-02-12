@@ -109,13 +109,13 @@ const SearchAnimeForm = () => {
 
       <div>
         <h2 style={{ paddingTop: "1.25rem" }}>
-          {searchedAnimes.length
-            ? `Viewing ${searchedAnimes.length} results:`
-            : "Search for a anime to begin"}
+          {searchedAnimes.length > 0 &&
+            `Viewing ${searchedAnimes.length} results: `}
         </h2>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
-          {console.log("Searched animes:", searchedAnimes)}
+          {/* {console.log("Searched animes:", searchedAnimes)} */}
           {searchedAnimes &&
+            Array.isArray(searchedAnimes) &&
             searchedAnimes.map((anime) => {
               // Guard against searchedAnimes being null or undefined
               return (
@@ -137,7 +137,9 @@ const SearchAnimeForm = () => {
                         Episodes: {anime.episodes}
                         <br />
                         Genres:{" "}
-                        {anime.genres.map((genre) => genre.name).join(", ")}
+                        {anime.genres.length > 0
+                          ? anime.genres.map((genre) => genre.name).join(", ")
+                          : "No genres available"}
                       </p>
                       <p>Synopsis: {anime.synopsis}</p>
                       {Auth.loggedIn() && (

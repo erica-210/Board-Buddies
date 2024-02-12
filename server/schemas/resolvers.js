@@ -5,6 +5,10 @@ const axios = require("axios");
 
 const resolvers = {
   Query: {
+    me: async (_, __, context) => {
+      // Implement logic to fetch the current user based on the authentication token in the context
+      // Example: return await context.getUser();
+    },
     // get all users
     users: async () => {
       return User.find().populate("savedAnime");
@@ -23,23 +27,46 @@ const resolvers = {
       return Posts.findOne({ _id });
     },
     anime: async (parent, { id }) => {
-      const response = await axios.get(
-        `https://api.jikan.moe/v4/anime/${id}/full`
-      );
-      const animeData = response.data.data;
-
-      const genres = animeData.genres.map((genre) => ({
-        mal_id: genre.mal_id,
-        name: genre.name,
-      }));
-      return {
-        mal_id: animeData.mal_id,
-        title: animeData.title,
-        images: animeData.images,
-        episodes: animeData.episodes,
-        synopsis: animeData.synopsis,
-        genres: genres,
-      };
+      try {
+        // Make API request to fetch anime data
+        const response = await axios.get(`https://api.jikan.moe/v4/anime/${id}/full`);
+        const animeData = response.data.data;
+    
+        // Validate animeData structure
+        if (!animeData || typeof animeData !== 'object') {
+          throw new Error('Invalid anime data received');
+        }
+    
+        // Extract genres from animeData
+        let genres = [];
+        if (animeData.genres && Array.isArray(animeData.genres)) {
+          genres = animeData.genres.map((genre) => ({
+            mal_id: genre.mal_id,
+            name: genre.name,
+          }));
+        }
+    
+        // Return formatted anime data
+        return {
+          mal_id: animeData.mal_id || null,
+          title: animeData.title || 'Unknown Title',
+          images: animeData.images || {},
+          episodes: animeData.episodes || 0,
+          synopsis: animeData.synopsis || 'No synopsis available',
+          genres: genres,
+        };
+      } catch (error) {
+        console.error('Error fetching anime data:', error.message);
+        // Return null or empty object in case of error
+        return {
+          mal_id: null,
+          title: 'Unknown Title',
+          images: {},
+          episodes: 0,
+          synopsis: 'No synopsis available',
+          genres: [],
+        };
+      }
     },
   },
 
@@ -72,26 +99,34 @@ const resolvers = {
       // Return token and user data
       return { token, user };
     },
-    // add a board game
-    saveAnime: async (parent, { animeData }, context) => {
+    // add an anime
+ 
+    saveAnime: async (parent, { animeId }, context) => {
       if (context.user) {
+        // Fetch the Anime object corresponding to animeId
+        const anime = await Anime.findById(animeId);
+        if (!anime) {
+          throw new Error('Anime not found');
+        }
+
+        // Add the Anime object to the user's savedAnime array
         const updatedUser = await User.findByIdAndUpdate(
           context.user._id,
-          { $addToSet: { savedAnime: animeData } },
+          { $addToSet: { savedAnime: anime } }, // Ensure uniqueness
           { new: true }
         );
         return updatedUser;
       }
-      // Throw error if user is not authenticated
-      throw new AuthenticationError("Login required!");
+      throw new AuthenticationError('Login required!');
     },
+
     // remove a board game
     removeAnime: async (parent, { animeId }, context) => {
       if (context.user) {
         // Update user's document to remove book from savedBooks array
         const updatedUser = await User.findByIdAndUpdate(
           context.user._id,
-          { $pull: { savedAnime: { mal_id: animeId } } },
+          { $pull: { savedAnime: animeId } },
           { new: true }
         );
         return updatedUser;
@@ -131,34 +166,42 @@ const resolvers = {
       throw new AuthenticationError("Login required!");
     },
     // add a comment
-    addComment: async (parent, { commentId, commentText }, context) => {
+    addComment: async (parent, { postId, commentText }, context) => {
       if (context.user) {
-        const updatedPost = await Comments.findOneAndUpdate(
-          { _id: postId },
-          {
-            $addToSet: {
-              comments: { commentText, username: context.user.username },
-            },
-          },
-          { new: true, runValidators: true }
-        );
+        // Create the comment object
+        const comment = new Comment({
+          content: commentText,
+          user: context.user._id, // Store the user's ObjectId
+          post: postId,
+        });
+
+        // Save the comment
+        const savedComment = await comment.save();
+
+        // Update the post's comments array
+        await Post.findByIdAndUpdate(postId, {
+          $addToSet: { comments: savedComment },
+        });
+
+        // Return the updated post
+        const updatedPost = await Post.findById(postId).populate('comments');
         return updatedPost;
       }
-      // Throw error if user is not authenticated
-      throw new AuthenticationError("Login required!");
+      throw new AuthenticationError('Login required!');
     },
     // remove a comment
     removeComment: async (parent, { postId, commentId }, context) => {
       if (context.user) {
-        const updatedPost = await Comments.findOneAndUpdate(
-          { _id: postId },
-          {
-            $pull: {
-              comments: { _id: commentId, username: context.user.username },
-            },
-          },
+        // Remove the comment
+        await Comment.findByIdAndDelete(commentId);
+
+        // Update the post's comments array
+        const updatedPost = await Post.findByIdAndUpdate(
+          postId,
+          { $pull: { comments: commentId } },
           { new: true }
-        );
+        ).populate('comments');
+
         return updatedPost;
       }
       // Throw error if user is not authenticated

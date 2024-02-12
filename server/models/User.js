@@ -2,9 +2,8 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 const bcryptjs = require("bcryptjs");
-const BoardGame = require("./BoardGames.js");
-const Comment = require("./Comments.js");
-const Post = require("./Posts.js");
+const Anime = require("./Anime.js");
+
 
 const userSchema = new Schema(
   {
@@ -23,9 +22,9 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    savedGames: [BoardGame.schema],
-    posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
-    comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+    savedAnime: [Anime.schema],
+    post: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+    comment: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   },
 
   {
