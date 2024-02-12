@@ -38,7 +38,8 @@ const PostForm = () => {
         variables: {
           title: titleState, // Add title field
           content: contentState,
-          user:  Auth.getProfile().data._id// Add content field
+          user:  Auth.getProfile().data._id,// Add content field
+          username: Auth.getProfile().data.username,
         },
       });
       console.log("Post added successfully:", data);
