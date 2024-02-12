@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_ANIMES } from "../../utils/queries";
+//import { GET_ANIMES } from "/../utils/queries";
 import { addToPlanToWatch, addToWatched } from "../../utils/localStorage";
 
 const SingleAnime = () => {

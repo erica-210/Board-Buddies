@@ -140,11 +140,13 @@ const resolvers = {
         const post = await Posts.create({
           title,
           content,
-          username: context.user.username,
-        });
-        await User.findByIdAndUpdate(context.user._id, {
-          $addToSet: { posts: post._id },
-        });
+          user: context.user._id});
+        
+        await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { posts: post._id}  },
+          { new: true}
+        );
         return post;
       }
       // Throw error if user is not authenticated

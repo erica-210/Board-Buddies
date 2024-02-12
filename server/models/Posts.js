@@ -11,7 +11,6 @@ const postSchema = new Schema({
   },
   user: {
     type: String,
-    required: true
   },
   comment: [
     {

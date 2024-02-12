@@ -39,7 +39,7 @@ const typeDefs = gql`
     _id: ID!
     title: String!
     content: String!
-    user: String!
+    user: User
     comment: [Comment]
   }
 

@@ -67,12 +67,11 @@ export const GET_USERS = gql`
 export const QUERY_POSTS = gql`
   query posts($username: String) {
     posts(username: $username) {
-      postId
+      _id
       title
       content
-      
       comments {
-        CommentId
+        _id
         commentText
         user {
           _id
