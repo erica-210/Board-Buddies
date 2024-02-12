@@ -11,9 +11,12 @@ const Profile = (props) => {
       <div className="welcome-container">
         <h1 className="welcome">Welcome to your Profile Page</h1>
       </div>
-      <Row xs={24} sm={12} md={8} lg={6} xl={4}>
+      <Row className="profilepage">
         <Col span={8} className="sidecard">
-        <h2 className="userinfo">User Info Here</h2>
+          <Divider orientation="center">
+            <h2 className="userinfo">User Info Here</h2>
+          </Divider>
+
           <h2 className="userinfo">{props.username}</h2>
           {console.log(props.username)}
           <div className="dropdowns">
@@ -22,7 +25,10 @@ const Profile = (props) => {
           </div>
         </Col>
         <Col span={12} className="postcard">
-          <h2>User Posts</h2>
+          <Divider orientation="left">
+            <h2>User Posts</h2>
+          </Divider>
+
           <PostForm />
         </Col>
       </Row>
