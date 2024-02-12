@@ -1,7 +1,7 @@
 {
     "name": "board-buddies",
     "version": "1.0.0",
-    "description": "A social media platform for board game enthusiasts",
+    "description": "A social media platform for anime enthusiasts",
     "main": "server/server.js",
     "Important for MERN Setup": {
         "line-10": "We use this top-level package.json file to define scripts we can run to control our entire application from the same CLI location.",
@@ -16,7 +16,7 @@
         "heroku-build": "npm install && npm run build"
     },
     "keywords": [
-        "board-games",
+        "anime",
         "social-media",
         "MERN"
     ],
@@ -35,5 +35,8 @@
         "axios": "^1.6.7",
         "dotenv": "^16.4.2",
         "eslint-config-prettier": "^9.1.0"
-    }
+    },
+    "engines": {
+        "node": "18.18.1"
+      }
 }
