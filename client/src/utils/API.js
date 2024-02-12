@@ -33,25 +33,24 @@
 //   .then(response => response.json());
 // };
 
-// // Make a search to BoardGameGeek XML API
-// export const searchBoardGameGeek = (query) => {
-//   return fetch(`https://www.boardgamegeek.com/xmlapi2/search?type=boardgame&query=${query}`)
+// // Make a search to anime api without axios
+// export const searchAnimeApi = (query) => {
+//   return fetch(`https://api.jikan.moe/v4/anime?q=${query}`)
 //   .then(response => response.json()); // Convert response to JSON
 // };
 
-import axios from 'axios';
-
+import axios from "axios";
 
 // Define the base URL for the Anime API
-const BASE_URL = "https://api.jikan.moe/v4/anime/${id}/full";
+const BASE_URL = "https://api.jikan.moe/v4";
 
 // Function to fetch board game data by game ID
-export const fetchAnimeById = async (Id) => {
+export const fetchAnimeById = async (id) => {
   try {
-    const response = await axios.get(`${BASE_URL}/anime?id=${Id}`);
+    const response = await axios.get(`${BASE_URL}/anime/${id}/full`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching game details:', error);
+    console.error("Error fetching anime details:", error);
     throw error; // Rethrow the error for handling in the calling function
   }
 };
@@ -59,11 +58,10 @@ export const fetchAnimeById = async (Id) => {
 // Function to search for anime by name
 export const searchAnimeByName = async (query) => {
   try {
-    const response = await axios.get(`${BASE_URL}/search/anime?q=${query}`);
+    const response = await axios.get(`${BASE_URL}/anime?q=${query}`);
     return response.data;
   } catch (error) {
-    console.error('Error searching for games:', error);
+    console.error("Error searching for anime:", error);
     throw error;
   }
 };
-
