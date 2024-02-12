@@ -36,26 +36,28 @@ const PostForm = () => {
     try {
       const { data } = await addPost({
         variables: {
-          title: "New Post Title", // Add title field
-          content: postText, // Rename variable to commentText
+          title: titleState, // Add title field
+          content: contentState,
+          user:  Auth.getProfile().data._id// Add content field
         },
       });
       console.log("Post added successfully:", data);
 
-      if ( contentState ) {
-        await addComment({
-          variables: {
-            postId: data.addPost.postId,
-            commentText: postText,
-          },
-        });
-        console.log(
-          "Comment added successfully for post:",
-          data.addPost.postId
-        );
-      }
+      // if ( contentState ) {
+      //   await addComment({
+      //     variables: {
+      //       postId: data.addPost.postId,
+      //       commentText: postText,
+      //     },
+      //   });
+      //   console.log(
+      //     "Comment added successfully for post:",
+      //     data.addPost.postId
+      //   );
+      // }
 
-      setPostText("");
+      setContentState("");
+      setTitleState("");
       setCharacterCount(0); // Reset character count after successful submission
     } catch (err) {
       console.error("An error occurred while adding the post:", err.message);
@@ -67,13 +69,13 @@ const PostForm = () => {
 
     if (name === "content" && value.length <= 280) {
       console.log("Post text changed:", value);
-      setPostText(value);
+      setContentState(value);
       setCharacterCount(value.length);
     }
 
     if (name === "title" && value.length <= 50) {
       console.log("Post title changed:", value);
-      setPostTitle(value);
+      setTitleState(value);
       
     }
   };

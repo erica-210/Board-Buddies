@@ -85,22 +85,10 @@ export const REMOVE_ANIME = gql`
 `;
 
 export const ADD_POST = gql`
-  mutation AddPost($title: String!, $content: String!) {
-    addPost(title: $title, content: $content) {
-      _id
-      user
+  mutation AddPost($title: String!, $content: String! ) {
+    addPost(title: $title, content: $content ) {
       title
       content
-      comments {
-        CommentId
-        commentText
-        user {
-          _id
-        }
-        post {
-          _id
-        }
-      }
     }
   }
 `;
