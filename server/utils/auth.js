@@ -1,7 +1,7 @@
 const { GraphQLError } = require('graphql');
 const jwt = require('jsonwebtoken');
 
-const secret = 'mysecretssshhhhhhh';
+const secret = process.env.JWT_SECRET; 
 const expiration = '2h';
 
 module.exports = {
@@ -23,11 +23,25 @@ module.exports = {
       return req;
     }
 
+    // try {
+    //   const { data } = jwt.verify(token, secret, { maxAge: expiration });
+    //   req.user = data;
+    // } catch {
+    //   console.log('Invalid token');
+    // }
+
     try {
-      const { data } = jwt.verify(token, secret, { maxAge: expiration });
+      const { data } = jwt.verify(token, secret);
       req.user = data;
-    } catch {
-      console.log('Invalid token');
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        console.log('Access token expired');
+        // Redirect to login page when access token expires
+        res.redirect('/');
+      } else {
+        console.log('Invalid token:', error.message);
+        // Handle invalid token error
+      }
     }
 
     return req;
