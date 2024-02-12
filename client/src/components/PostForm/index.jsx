@@ -5,7 +5,10 @@ import { QUERY_POSTS, GET_ME } from "../../utils/queries";
 import Auth from "../../utils/auth";
 
 const PostForm = () => {
-  const [postText, setPostText] = useState("");
+
+  const [titleState, setTitleState] = useState("");
+  const [contentState, setContentState] = useState("");
+
   const [characterCount, setCharacterCount] = useState(0);
 
   const [addPost, { error: postError }] = useMutation(ADD_POST, {
@@ -39,7 +42,7 @@ const PostForm = () => {
       });
       console.log("Post added successfully:", data);
 
-      if (postText) {
+      if ( contentState ) {
         await addComment({
           variables: {
             postId: data.addPost.postId,
@@ -62,10 +65,16 @@ const PostForm = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === "postText" && value.length <= 280) {
+    if (name === "content" && value.length <= 280) {
       console.log("Post text changed:", value);
       setPostText(value);
       setCharacterCount(value.length);
+    }
+
+    if (name === "title" && value.length <= 50) {
+      console.log("Post title changed:", value);
+      setPostTitle(value);
+      
     }
   };
 
@@ -92,11 +101,21 @@ const PostForm = () => {
             className="flex-row justify-center justify-space-between-md align-center"
             onSubmit={handleFormSubmit}
           >
+             <div className="col-12 col-lg-9">
+          <input
+            name="title"
+            placeholder="Add your name to get credit for the thought..."
+            value={titleState}
+            className="form-input w-100"
+            onChange={handleChange}
+          />
+        </div>
+        <br></br>
             <div className="col-12 col-lg-9">
               <textarea
-                name="postText"
+                name="content"
                 placeholder="Here's a new thought..."
-                value={postText}
+                value={contentState}
                 className="form-input w-100"
                 style={{ lineHeight: "1.5", resize: "vertical" }}
                 onChange={handleChange}
