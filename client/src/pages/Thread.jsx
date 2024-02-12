@@ -5,7 +5,9 @@ import AllPosts from '../components/AllPosts';
 const Thread = () => {
   return (
     <div>
-      <h1>Welcome to the Thread Page</h1>
+      <div className="welcome-container" >
+      <h1 className="welcome" >Welcome to the Thread Page</h1>
+      </div>
       <AllPosts />
     </div>
   );

@@ -5,7 +5,9 @@ import SinglePostCard from '../components/SinglePostCard';
 const SinglePost = () => {
   return (
     <div>
-      <h1>Welcome to the Single Post Page</h1>
+      <div className="welcome-container" >
+      <h1 className="welcome" >Welcome to the Single Post Page</h1>
+      </div>
       <SinglePostCard />
     </div>
   );

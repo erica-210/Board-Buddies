@@ -7,7 +7,9 @@ import AnimeToWatch from "../components/AnimeToWatch";
 const Profile = () => {
   return (
     <div>
-      <h1>Welcome to your Profile Page</h1>
+      <div className="welcome-container" >
+      <h1 className="welcome" >Welcome to your Profile Page</h1>
+      </div>
       <PostForm />
       <AnimeWatched />
       <AnimeToWatch/>

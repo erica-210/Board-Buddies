@@ -40,3 +40,25 @@
 .teamname {
     color: #86e673;
 }
+
+/* standard for all pages*/
+.welcome {
+    color: #31552a;
+    font-weight: bold;
+    display: inline-block; 
+  }
+  
+  .welcome-container {
+    text-align: center; 
+  }
+  
+  .welcome::after {
+    content: ''; 
+    display: block;
+    width: 100%; 
+    margin: 0 auto; 
+    border-bottom: 3px solid #001433; 
+    margin-top: 5px; 
+    margin-bottom: 15px;
+  }
+  
