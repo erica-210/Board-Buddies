@@ -2,10 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { QUERY_POSTS } from "../../utils/queries";
+import Auth from "../../utils/auth";
 
 const AllPosts = () => {
     const { loading, error, data } = useQuery(QUERY_POSTS);
-  
+   console.log(data);
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
   

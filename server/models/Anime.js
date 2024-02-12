@@ -14,7 +14,10 @@ const AnimeImageSchema = new Schema({
 });
 
 const AnimeSchema = new Schema({
-  mal_id: { type: String, required: true, unique: true },
+   mal_id: { 
+    type: String, 
+    required: true},
+
   title: {
     type: String,
   },
