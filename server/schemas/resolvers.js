@@ -18,9 +18,8 @@ const resolvers = {
       return User.findOne({ username }).populate("savedAnime");
     },
     // get all posts
-    posts: async (parent, { username }) => {
-      const params = username ? { username } : {};
-      return Posts.find(params).sort({ createdAt: -1 });
+    posts: async (parent, __, ___) => {
+      return Posts.find().populate("user");
     },
     // get a post by id
     postById: async (parent, { _id }) => {
@@ -140,11 +139,12 @@ const resolvers = {
         const post = await Posts.create({
           title,
           content,
-          user: context.user._id});
+          user: context.user._id,
+          });
         
         await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { posts: post._id}  },
+          { $addToSet: { post: post},   },
           { new: true}
         );
         return post;
