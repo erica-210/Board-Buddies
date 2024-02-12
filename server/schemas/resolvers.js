@@ -1,5 +1,5 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { BoardGames, User, Posts, Comments } = require("../models");
+const { Anime, User, Posts, Comments, Genre } = require("../models");
 const { signToken } = require("../utils/auth");
 const axios = require("axios");
 
