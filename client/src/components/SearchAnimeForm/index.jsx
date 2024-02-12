@@ -75,7 +75,7 @@ const SearchAnimeForm = () => {
   return (
     <div>
       <div
-        style={{ color: "white", backgroundColor: "black", padding: "1rem" }}
+        style={{ color: "white", backgroundColor: "#001433", padding: "1rem", borderRadius: "8px" }}
       >
         <div>
           <h1>Search for a new anime!</h1>
@@ -94,7 +94,7 @@ const SearchAnimeForm = () => {
                 style={{
                   padding: "0.5rem 1rem",
                   fontSize: "1.25rem",
-                  backgroundColor: "green",
+                  backgroundColor: "#31552a",
                   color: "white",
                   border: "none",
                   cursor: "pointer",

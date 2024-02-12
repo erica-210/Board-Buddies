@@ -1,3 +1,6 @@
+import React from "react";
+import { GithubOutlined } from "@ant-design/icons";
+
 const Footer = () => {
   return (
     <footer className="footer" >
@@ -13,15 +16,18 @@ const Footer = () => {
             >
               ❤️
             </span>{" "}
-            by the Mighty Coding Program Rangers!
+            by the <a className="teamname">Mighty Coding Program Rangers!</a>
           </h4>
           <h1>
+          <GithubOutlined />
             <a href="https://github.com/erica-210">
               <strong>Erica San Miguel</strong>
             </a>
+            <GithubOutlined />
             <a href="https://github.com/Lunafish01">
               <strong>Joshua Luna</strong>
             </a>
+            <GithubOutlined />
             <a href="https://github.com/DamascusKraken">
               <strong>Nicholas Canchola</strong>
             </a>

@@ -5,7 +5,9 @@ import SingleAnimeCard from '../components/SingleAnimeCard';
 const SingleAnime = () => {
   return (
     <div>
-      <h1>Welcome to the Single Anime Page</h1>
+      <div className="welcome-container" >
+      <h1 className="welcome" >Welcome to the Single Anime Page</h1>
+      </div>
       <SingleAnimeCard />
     </div>
   );

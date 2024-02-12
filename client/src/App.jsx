@@ -1,5 +1,6 @@
 import React from "react";
 import { Layout, Menu } from "antd";
+import { UserOutlined, SearchOutlined, MenuOutlined, CloseOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import {
   ApolloClient,
@@ -41,7 +42,7 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <Layout style={{ minHeight: '100vh'}}>
+      <Layout style={{ minHeight: '100vh'}} >
         <Sider
           breakpoint="lg"
           collapsedWidth="0"
@@ -55,17 +56,17 @@ function App() {
           <div className="logo" />
           <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
             <Menu.Item key="1">
-              <Link to="/profile">Profile</Link>
+              <Link to="/profile">Profile <UserOutlined /></Link>
             </Menu.Item>
             <Menu.Item key="2">
-              <Link to="/search">Search</Link>
+              <Link to="/search">Search <SearchOutlined /></Link>
             </Menu.Item>
             <Menu.Item key="3">
-              <Link to="/thread">Thread</Link>
+              <Link to="/thread">Thread <MenuOutlined /></Link>
             </Menu.Item>
             <Menu.Item key="4">
               <a href="#section" onClick={Auth.logout}>
-                Logout
+                Logout <CloseOutlined />
               </a>
             </Menu.Item>
           </Menu>
@@ -73,7 +74,7 @@ function App() {
         <Layout className="body">
           <Header />
           <Layout.Content style={{ margin: '24px 16px 0' }} className="outlet"> 
-            <div style={{ padding: 24, background: '#bae0ff', minHeight: '100%' }}>
+            <div style={{ padding: 24, background: '#BAE0FF', minHeight: '100%' }}>
               <Outlet />
             </div>
           </Layout.Content>
