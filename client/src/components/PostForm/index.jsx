@@ -89,7 +89,6 @@ const PostForm = () => {
 
   return (
     <div>
-      <h3>What do you have to say about this board game?</h3>
 
       {Auth.loggedIn() ? (
         <>
