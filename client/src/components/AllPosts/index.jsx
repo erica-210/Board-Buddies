@@ -14,7 +14,7 @@ const AllPosts = () => {
         <h1>All Posts</h1>
         <ul>
           {data.posts && data.posts.map((post) => (
-            <li key={post.postId}>
+            <li key={post._id}>
               <h2>{post.title}</h2>
               <p>{post.content}</p>
               <Link to={`/singlepost/${post.postId}`}>View Post</Link>

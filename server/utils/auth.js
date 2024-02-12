@@ -1,41 +1,37 @@
 const { GraphQLError } = require('graphql');
+require ('dotenv').config();
 const jwt = require('jsonwebtoken');
-const secret = process.env.JWT_SECRET || 'defaultSecret';
+const secret = process.env.JWT_SECRET;
 const expiration = '2h';
-
 module.exports = {
   AuthenticationError: new GraphQLError('Could not authenticate user.', {
     extensions: {
       code: 'UNAUTHENTICATED',
     },
   }),
-  authMiddleware: function ({ req, res }) {
-    // Allow the token to be sent via req.body, req.query, or headers
+  authMiddleware: function ({ req, res }) { // Add res as a parameter
+    // allows token to be sent via req.body, req.query, or headers
     let token = req.body.token || req.query.token || req.headers.authorization;
-
-    // ["Bearer", "<tokenvalue>"]
+    // [“Bearer”, “<tokenvalue>“]
     if (req.headers.authorization) {
       token = token.split(' ').pop().trim();
     }
-
     if (!token) {
       return req;
     }
-
     try {
-      const { data } = jwt.verify(token, secret);
-      req.user = data; // Assign decoded data to req.user
+      const decoded = jwt.verify(token, secret);
+      req.user = decoded.data; // Assign decoded data to req.user
     } catch (error) {
       if (error.name === 'TokenExpiredError') {
         console.log('Access token expired');
         // Redirect to login page when access token expires
-        return res.redirect('/login');
+        res.redirect('/'); // Redirect to login page
       } else {
         console.log('Invalid token:', error.message);
         // Handle invalid token error
       }
     }
-
     return req;
   },
   signToken: function ({ firstName, email, _id }) {

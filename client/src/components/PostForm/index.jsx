@@ -5,7 +5,10 @@ import { QUERY_POSTS, GET_ME } from "../../utils/queries";
 import Auth from "../../utils/auth";
 
 const PostForm = () => {
-  const [postText, setPostText] = useState("");
+
+  const [titleState, setTitleState] = useState("");
+  const [contentState, setContentState] = useState("");
+
   const [characterCount, setCharacterCount] = useState(0);
 
   const [addPost, { error: postError }] = useMutation(ADD_POST, {
@@ -33,26 +36,28 @@ const PostForm = () => {
     try {
       const { data } = await addPost({
         variables: {
-          title: "New Post Title", // Add title field
-          content: postText, // Rename variable to commentText
+          title: titleState, // Add title field
+          content: contentState,
+          user:  Auth.getProfile().data._id// Add content field
         },
       });
       console.log("Post added successfully:", data);
 
-      if (postText) {
-        await addComment({
-          variables: {
-            postId: data.addPost.postId,
-            commentText: postText,
-          },
-        });
-        console.log(
-          "Comment added successfully for post:",
-          data.addPost.postId
-        );
-      }
+      // if ( contentState ) {
+      //   await addComment({
+      //     variables: {
+      //       postId: data.addPost.postId,
+      //       commentText: postText,
+      //     },
+      //   });
+      //   console.log(
+      //     "Comment added successfully for post:",
+      //     data.addPost.postId
+      //   );
+      // }
 
-      setPostText("");
+      setContentState("");
+      setTitleState("");
       setCharacterCount(0); // Reset character count after successful submission
     } catch (err) {
       console.error("An error occurred while adding the post:", err.message);
@@ -62,10 +67,16 @@ const PostForm = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === "postText" && value.length <= 280) {
+    if (name === "content" && value.length <= 280) {
       console.log("Post text changed:", value);
-      setPostText(value);
+      setContentState(value);
       setCharacterCount(value.length);
+    }
+
+    if (name === "title" && value.length <= 50) {
+      console.log("Post title changed:", value);
+      setTitleState(value);
+      
     }
   };
 
@@ -92,11 +103,21 @@ const PostForm = () => {
             className="flex-row justify-center justify-space-between-md align-center"
             onSubmit={handleFormSubmit}
           >
+             <div className="col-12 col-lg-9">
+          <input
+            name="title"
+            placeholder="Add your name to get credit for the thought..."
+            value={titleState}
+            className="form-input w-100"
+            onChange={handleChange}
+          />
+        </div>
+        <br></br>
             <div className="col-12 col-lg-9">
               <textarea
-                name="postText"
+                name="content"
                 placeholder="Here's a new thought..."
-                value={postText}
+                value={contentState}
                 className="form-input w-100"
                 style={{ lineHeight: "1.5", resize: "vertical" }}
                 onChange={handleChange}
