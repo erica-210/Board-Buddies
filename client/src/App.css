@@ -1,3 +1,4 @@
+/* app.jsx */
 .body {
     background: linear-gradient(to bottom, #e6f4ff, #001433);
     border: 4px solid #001433;
@@ -11,3 +12,31 @@
     margin: 20px;
 }
 
+/* header */
+.header {
+    background: #001433;
+    color: #e6f4ff;
+    padding: 10px;
+    margin: 20px;
+    border-radius: 10px;
+    border: 4px solid #001433;
+    text-align: center;
+}
+
+.headertitle {
+    font-size: 40px;
+    font-weight: bold;
+    color: #86e673;
+}
+
+/* footer */
+.footer {
+    color: #e6f4ff;
+    padding: 10px;
+    margin: 20px;
+    text-align: center;
+}
+
+.teamname {
+    color: #86e673;
+}
