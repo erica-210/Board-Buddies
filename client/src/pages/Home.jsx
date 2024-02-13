@@ -2,14 +2,19 @@ import React from 'react';
 
 import Login from '../components/LoginForm/Login';
 import Signup from '../components/SignupForm/index';
+import { Typography } from "antd";
+
+const { Title } = Typography;
 
 
 const Home = () => {
   return (
+    <div style={{ textAlign: "center" }}>
     <div>
-      <h1>Welcome to the anime discovery hub!</h1>
+      <Title>Welcome to the anime discovery hub!</Title>
       <Login />
       <Signup />
+    </div>
     </div>
   );
 };
