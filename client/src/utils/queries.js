@@ -123,9 +123,10 @@ export const GET_POST_BY_ID = gql`
   }
 `;
 
-export const GET_ANIME = gql`
-  query GetAnime($id: ID!) {
-    anime(id: $id) {
+export const GET_ANIMES = gql`
+  query searchanime($title: String!) {
+    anime(title: $title) {
+      mal_id
       title
       images {
         jpg {
