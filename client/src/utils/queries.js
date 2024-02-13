@@ -133,8 +133,8 @@ export const GET_POST_BY_ID = gql`
 `;
 
 export const GET_ANIMES = gql`
-  query searchAnime($title: String!) {
-    anime(title: $title) {
+  query getSearchAnime($query: String!) {
+    searchAnime(query: $query) {
       mal_id
       title
       images {

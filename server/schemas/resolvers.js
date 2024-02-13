@@ -1,15 +1,13 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { Anime, User, Posts, } = require("../models");
+const { Anime, User, Posts } = require("../models");
 const { signToken } = require("../utils/auth");
 const axios = require("axios");
 
-
 const resolvers = {
   Query: {
-     meBasic: async () => {
-      
-        return await User.find();
-     },
+    meBasic: async () => {
+      return await User.find();
+    },
     me: async (parent, args, context) => {
       if (context.user) {
         // Fetch user data excluding sensitive fields
@@ -26,9 +24,10 @@ const resolvers = {
       return User.find().populate("savedAnime");
     },
     // get a user by username
-    user: async (_,__,context) => {
-      
-      return User.findOne({ username: context.user.username }).populate("savedAnime");
+    user: async (_, __, context) => {
+      return User.findOne({ username: context.user.username }).populate(
+        "savedAnime"
+      );
     },
     // get all posts
     Post: async () => {
@@ -42,23 +41,43 @@ const resolvers = {
     searchAnime: async (parent, { query }) => {
       try {
         const response = await axios.get(
-          `https://api.jikan.moe/v4/anime?q=${query}`
+          `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}`
         );
+        // console.log('Response from API:', response.data);
         const animeData = response.data.data;
-        return animeData.map((anime) => {
+
+        // Validate animeData structure
+        if (!animeData || typeof animeData !== "object") {
+          throw new Error("Invalid anime data received");
+        }
+
+        // If animeData is an object, wrap it in an array
+        const animeArray = Array.isArray(animeData) ? animeData : [animeData];
+
+        // Extract genres for each anime in the array
+        const formattedAnimeData = animeArray.map((anime) => {
+          let genres = [];
+          if (anime.genres && Array.isArray(anime.genres)) {
+            genres = anime.genres.map((genre) => ({
+              mal_id: genre.mal_id,
+              name: genre.name,
+            }));
+          }
           return {
-            mal_id: anime.mal_id,
-            title: anime.title,
-            images: anime.images,
-            episodes: anime.episodes,
-            synopsis: anime.synopsis,
-            genres: anime.genres,
+            mal_id: anime.mal_id || null,
+            title: anime.title || "Unknown Title",
+            images: anime.images || {},
+            episodes: anime.episodes || 0,
+            synopsis: anime.synopsis || "No synopsis available",
+            genres: genres,
           };
         });
+
+        console.log("Formatted anime data:", formattedAnimeData);
+        return formattedAnimeData;
       } catch (error) {
-        //Handle error
         console.error("Error fetching anime details:", error);
-        return [];
+        return []; // Return an empty array in case of error
       }
     },
     // get a single anime by id

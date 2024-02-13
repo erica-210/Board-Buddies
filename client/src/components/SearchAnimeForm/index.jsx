@@ -3,17 +3,18 @@ import Auth from "../../utils/auth";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 import { SAVE_ANIME } from "../../utils/mutations";
-import { GET_ANIMES } from "../../utils/queries";
+// import { GET_ANIMES } from "../../utils/queries";
 import { saveAnimeIds, getSavedAnimeIds } from "../../utils/localStorage";
 
 const SearchAnimeForm = () => {
   const [searchInput, setSearchInput] = useState("");
   const [savedAnimeIds, setSavedAnimeIds] = useState(getSavedAnimeIds());
-  const { loading, error, data } = useQuery(GET_ANIMES, {
-    variables: { title: searchInput }
-  });
-  
-  console.log(data);
+  const [searchResults, setSearchResults] = useState([]);
+  // const { loading, error, data } = useQuery(GET_ANIMES, {
+  //   variables: { title: searchInput }
+  // });
+
+  // // console.log(response.data.data);
 
   useEffect(() => {
     return () => saveAnimeIds(savedAnimeIds);
@@ -29,7 +30,22 @@ const SearchAnimeForm = () => {
       return false;
     }
 
+    //   try {
+    //     setSearchInput(""); // Clear the search input
+    //   } catch (err) {
+    //     console.error("An error occurred while searching for animes:", err);
+    //   }
+
     try {
+      // Hardcoded API URL
+      const response = await fetch(
+        `https://api.jikan.moe/v4/anime?q=${searchInput}`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setSearchResults(data.data);
       setSearchInput(""); // Clear the search input
     } catch (err) {
       console.error("An error occurred while searching for animes:", err);
@@ -37,19 +53,28 @@ const SearchAnimeForm = () => {
   };
 
   const handleSaveAnime = async (animeId) => {
-    if (!data || !Array.isArray(data.anime)) {
-      console.error("No anime data available");
-      return;
-    }
+      // Find the anime in searchResults by the matching id
+      const animeToSave = searchResults.find((anime) => anime.mal_id === animeId);
 
-    // find the anime in `data.anime` by the matching id
-    const animeToSave = data.anime.find((anime) => anime.mal_id === animeId);
-
-    // If animeToSave is not found, log an error and return
+       // If animeToSave is not found, log an error and return
     if (!animeToSave) {
       console.error("Anime not found");
       return;
     }
+      
+  //   if (!data || !Array.isArray(data.anime)) {
+  //     console.error("No anime data available");
+  //     return;
+  //   }
+
+  //   // find the anime in `data.anime` by the matching id
+  //   const animeToSave = data.anime.find((anime) => anime.mal_id === animeId);
+
+  //   // If animeToSave is not found, log an error and return
+  //   if (!animeToSave) {
+  //     console.error("Anime not found");
+  //     return;
+  //   }
 
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -130,70 +155,66 @@ const SearchAnimeForm = () => {
               </button>
             </div>
           </form>
-          {loading && <p>Loading...</p>}
+          {/* {loading && <p>Loading...</p>}
           {error && <p>Error: {error.message}</p>}
-          {/* {console.log(error.message)} */}
+          {console.log(error.message)} */}
         </div>
       </div>
 
       <div>
         <h2 style={{ paddingTop: "1.25rem" }}>
-          {data &&
-            data.anime &&
-            data.anime.length > 0 &&
-            `Viewing ${data.anime.length} results: `}
+          {searchResults.length > 0 &&
+            `Viewing ${searchResults.length} results: `}
         </h2>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
-          {data &&
-            data.anime &&
-            data.anime.map((anime) => {
-              return (
-                <div
-                  key={anime.mal_id}
-                  style={{ width: "calc(33.33% - 1rem)", margin: "0.5rem" }}
-                >
-                  <div style={{ border: "1px solid black" }}>
-                    {anime.images && anime.images.jpg && (
-                      <img
-                        src={anime.images.jpg.image_url}
-                        alt={`The cover for ${anime.title}`}
-                        style={{ width: "100%", height: "auto" }}
-                      />
+          {searchResults.map((anime) => {
+            return (
+              <div
+                key={anime.mal_id}
+                style={{ width: "calc(33.33% - 1rem)", margin: "0.5rem" }}
+              >
+                <div style={{ border: "1px solid black" }}>
+                  {anime.images && anime.images.jpg && (
+                    <img
+                      src={anime.images.jpg.image_url}
+                      alt={`The cover for ${anime.title}`}
+                      style={{ width: "100%", height: "auto" }}
+                    />
+                  )}
+                  <div style={{ padding: "1rem" }}>
+                    <h3>{anime.title}</h3>
+                    <p>
+                      Episodes: {anime.episodes}
+                      <br />
+                      Genres:{" "}
+                      {anime.genres.length > 0
+                        ? anime.genres.map((genre) => genre.name).join(", ")
+                        : "No genres available"}
+                    </p>
+                    <p>Synopsis: {anime.synopsis}</p>
+                    {Auth.loggedIn() && (
+                      <Link to={`/anime/${anime.mal_id}`}>
+                        <button
+                          style={{
+                            width: "100%",
+                            padding: "0.5rem",
+                            fontSize: "1rem",
+                            backgroundColor: "blue",
+                            color: "white",
+                            border: "none",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => handleSaveAnime(anime.mal_id)}
+                        >
+                          View Anime
+                        </button>
+                      </Link>
                     )}
-                    <div style={{ padding: "1rem" }}>
-                      <h3>{anime.title}</h3>
-                      <p>
-                        Episodes: {anime.episodes}
-                        <br />
-                        Genres:{" "}
-                        {anime.genres.length > 0
-                          ? anime.genres.map((genre) => genre.name).join(", ")
-                          : "No genres available"}
-                      </p>
-                      <p>Synopsis: {anime.synopsis}</p>
-                      {Auth.loggedIn() && (
-                        <Link to={`/anime/${anime.mal_id}`}>
-                          <button
-                            style={{
-                              width: "100%",
-                              padding: "0.5rem",
-                              fontSize: "1rem",
-                              backgroundColor: "blue",
-                              color: "white",
-                              border: "none",
-                              cursor: "pointer",
-                            }}
-                            onClick={() => handleSaveAnime(anime.mal_id)}
-                          >
-                            View Anime
-                          </button>
-                        </Link>
-                      )}
-                    </div>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
