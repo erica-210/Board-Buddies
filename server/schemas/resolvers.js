@@ -1,7 +1,8 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { Anime, User, Posts, Comments, Genre } = require("../models");
+const { Anime, User, Posts, } = require("../models");
 const { signToken } = require("../utils/auth");
 const axios = require("axios");
+
 
 const resolvers = {
   Query: {
@@ -25,30 +26,42 @@ const resolvers = {
     postById: async (parent, { _id }) => {
       return Posts.findOne({ _id });
     },
-    // Need a resolver to preform search and return search rersult
-    // To do this search results are going to com back as an array of fairly complex objects and we need to return a simplified array of just the data we care about
-    // this will need to be done with multiple records 
-    // need to use .map to transform the data to match the typeDef we develop
-    //     try {
-    //     const response = await axios.get(`${BASE_URL}/anime/${id}/full`);
-    //     return response.data;
-    //   } catch (error) {
-    //     console.error("Error fetching anime details:", error);
-    //     throw error; // Rethrow the error for handling in the calling function
-    //   }
-    // };
-    // wire up the data we return on the client side with usequery hook
+    // get all anime
+    searchAnime: async (parent, { query }) => {
+      try {
+        const response = await axios.get(
+          `https://api.jikan.moe/v4/search/anime?q=${query}&limit=10`
+        );
+        const animeData = response.data.data;
+        return animeData.map((anime) => {
+          return {
+            mal_id: anime.mal_id,
+            title: anime.title,
+            images: anime.images,
+            episodes: anime.episodes,
+            synopsis: anime.synopsis,
+            genres: anime.genres,
+          };
+        });
+      } catch (error) {
+        //Handle error
+        console.error("Error fetching anime details:", error);
+        return [];
+      }
+    },
+    // get a single anime by id
     anime: async (parent, { id }) => {
       try {
         // Make API request to fetch anime data
-        const response = await axios.get(`https://api.jikan.moe/v4/anime/${id}/full`);
+        const response = await axios.get(
+          `https://api.jikan.moe/v4/anime/${id}/full`
+        );
         const animeData = response.data.data;
-    
+
         // Validate animeData structure
-        if (!animeData || typeof animeData !== 'object') {
-          throw new Error('Invalid anime data received');
+        if (!animeData || typeof animeData !== "object") {
+          throw new Error("Invalid anime data received");
         }
-    
         // Extract genres from animeData
         let genres = [];
         if (animeData.genres && Array.isArray(animeData.genres)) {
@@ -57,25 +70,24 @@ const resolvers = {
             name: genre.name,
           }));
         }
-    
         // Return formatted anime data
         return {
           mal_id: animeData.mal_id || null,
-          title: animeData.title || 'Unknown Title',
+          title: animeData.title || "Unknown Title",
           images: animeData.images || {},
           episodes: animeData.episodes || 0,
-          synopsis: animeData.synopsis || 'No synopsis available',
+          synopsis: animeData.synopsis || "No synopsis available",
           genres: genres,
         };
       } catch (error) {
-        console.error('Error fetching anime data:', error.message);
+        console.error("Error fetching anime data:", error.message);
         // Return null or empty object in case of error
         return {
           mal_id: null,
-          title: 'Unknown Title',
+          title: "Unknown Title",
           images: {},
           episodes: 0,
-          synopsis: 'No synopsis available',
+          synopsis: "No synopsis available",
           genres: [],
         };
       }
@@ -112,13 +124,13 @@ const resolvers = {
       return { token, user };
     },
     // add an anime
- 
+
     saveAnime: async (parent, { animeId }, context) => {
       if (context.user) {
         // Fetch the Anime object corresponding to animeId
         const anime = await Anime.findById(animeId);
         if (!anime) {
-          throw new Error('Anime not found');
+          throw new Error("Anime not found");
         }
 
         // Add the Anime object to the user's savedAnime array
@@ -129,7 +141,7 @@ const resolvers = {
         );
         return updatedUser;
       }
-      throw new AuthenticationError('Login required!');
+      throw new AuthenticationError("Login required!");
     },
 
     // remove a board game
@@ -153,12 +165,12 @@ const resolvers = {
           title,
           content,
           user: context.user._id,
-          });
-        
+        });
+
         await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { post: post},   },
-          { new: true}
+          { $addToSet: { post: post } },
+          { new: true }
         );
         return post;
       }
@@ -199,10 +211,10 @@ const resolvers = {
         });
 
         // Return the updated post
-        const updatedPost = await Post.findById(postId).populate('comments');
+        const updatedPost = await Post.findById(postId).populate("comments");
         return updatedPost;
       }
-      throw new AuthenticationError('Login required!');
+      throw new AuthenticationError("Login required!");
     },
     // remove a comment
     removeComment: async (parent, { postId, commentId }, context) => {
@@ -215,7 +227,7 @@ const resolvers = {
           postId,
           { $pull: { comments: commentId } },
           { new: true }
-        ).populate('comments');
+        ).populate("comments");
 
         return updatedPost;
       }
