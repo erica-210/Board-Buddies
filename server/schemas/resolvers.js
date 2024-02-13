@@ -18,13 +18,26 @@ const resolvers = {
       return User.findOne({ username }).populate("savedAnime");
     },
     // get all posts
-    posts: async (parent, __, ___) => {
+    Post: async () => {
       return Posts.find().populate("user");
     },
     // get a post by id
     postById: async (parent, { _id }) => {
       return Posts.findOne({ _id });
     },
+    // Need a resolver to preform search and return search rersult
+    // To do this search results are going to com back as an array of fairly complex objects and we need to return a simplified array of just the data we care about
+    // this will need to be done with multiple records 
+    // need to use .map to transform the data to match the typeDef we develop
+    //     try {
+    //     const response = await axios.get(`${BASE_URL}/anime/${id}/full`);
+    //     return response.data;
+    //   } catch (error) {
+    //     console.error("Error fetching anime details:", error);
+    //     throw error; // Rethrow the error for handling in the calling function
+    //   }
+    // };
+    // wire up the data we return on the client side with usequery hook
     anime: async (parent, { id }) => {
       try {
         // Make API request to fetch anime data

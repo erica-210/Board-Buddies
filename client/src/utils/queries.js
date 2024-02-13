@@ -65,10 +65,13 @@ export const GET_USERS = gql`
 `;
 
 export const QUERY_POSTS = gql`
-  query posts {
-    post {
+  query Post {
+    Post {
       title
       content
+      user {
+        username
+      }
     }
   }
 `;

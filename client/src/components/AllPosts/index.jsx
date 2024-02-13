@@ -4,25 +4,26 @@ import { useQuery } from "@apollo/client";
 import { QUERY_POSTS } from "../../utils/queries";
 import Auth from "../../utils/auth";
 
-const AllPosts = () => {
-    const { loading, error, data } = useQuery(QUERY_POSTS);
-   console.log(data);
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error.message}</p>;
-  
+const AllPosts = ({posts, title}) => {
+  console.log(posts);
+  if (!posts.length) {
+    return <h3>No Posts Yet</h3>;
+  }
+
     return (
       <div>
-        <h1>All Posts</h1>
+        <h1>{title}</h1>
         <ul>
-          {data.posts && data.posts.map((post) => (
+          {posts && posts.map((post) => (
             <li key={post._id}>
-              <h2>{post.title}</h2>
+              <h2>username: {post.user.username} Title:{post.title}</h2>
               <p>{post.content}</p>
-              <Link to={`/singlepost/${post.postId}`}>View Post</Link>
+              <Link to={`/singlepost/${post._id}`}>View Post</Link>
             </li>
           ))}
         </ul>
       </div>
+      
     );
   };
 
