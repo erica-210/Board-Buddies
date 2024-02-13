@@ -19,7 +19,7 @@ const Home = () => {
             <div>
               <Col span={18} className="meme">
                 <img
-                  id="meme"
+                  id="meme-image meme-overlay"
                   src={meme}
                   alt="meme"
                   style={{ width: "100%", height: "100%" }}
