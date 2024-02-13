@@ -42,7 +42,7 @@ const Profile = () => {
               justifyContent: "flex-start",
             }}
           >
-            <h2 className="userinfo">{props.username}</h2>
+            <h2 className="userinfo"></h2>
             <div className="dropdowns">
               <AnimeWatched />
               <AnimeToWatch />
