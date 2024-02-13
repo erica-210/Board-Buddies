@@ -44,6 +44,14 @@ export const GET_ME = gql`
   }
 `;
 
+export const meBasic = gql`{
+  meBasic {
+    _id
+    username
+    email
+  }
+}`;
+
 export const GET_USERS = gql`
   query users {
     users {
@@ -92,6 +100,7 @@ export const GET_USERS = gql`
 export const QUERY_POSTS = gql`
   query Post {
     Post {
+      _id
       title
       content
       user {
