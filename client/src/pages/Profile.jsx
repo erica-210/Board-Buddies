@@ -30,28 +30,42 @@ const Profile = () => {
         <h1 className="welcome">Welcome to your Profile Page</h1>
       </div>
       <Row className="profilepage">
-        <Col span={8} className="sidecard">
-          <Divider orientation="center">
-            <h2 className="userinfo">User Info Here</h2>
+        <Col span={12}>
+          <Divider orientation="left">
+            <h2 className="userinfo">My Anime</h2>
           </Divider>
-
-          <h2 className="userinfo"></h2>
-          
-          <div className="dropdowns">
-            <AnimeWatched />
-            <AnimeToWatch />
+          <div
+            style={{
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+            }}
+          >
+            <h2 className="userinfo">{props.username}</h2>
+            <div className="dropdowns">
+              <AnimeWatched />
+              <AnimeToWatch />
+            </div>
           </div>
         </Col>
-        <Col span={12} className="postcard">
+        <Col span={12}>
           <Divider orientation="left">
-            <h2>User Posts</h2>
+            <h2>Make a Post</h2>
           </Divider>
-
-          <PostForm />
+          <div
+            style={{
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <PostForm />
+          </div>
         </Col>
       </Row>
     </>
   );
 };
-
 export default Profile;

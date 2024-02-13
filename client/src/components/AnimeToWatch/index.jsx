@@ -26,7 +26,14 @@ const AnimeToWatch = () => {
   return (
     <div>
       <h2>Watch Next</h2>
-      <Select value={selectedAnimeId} onChange={handleSelectChange} style={{ width: 200 }}>
+      <Select
+        value={selectedAnimeId}
+        onChange={handleSelectChange}
+        style={{
+          width: 200,
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, .5)",
+          borderRadius: "10px",
+        }}>
         <Option value="">Select an anime</Option>
         {planToWatchAnime.map((animeId, index) => (
           <Option key={index} value={animeId}>
