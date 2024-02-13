@@ -5,7 +5,7 @@ import Auth from "../../utils/auth";
 import { saveAnimeIds, getSavedAnimeIds } from "../../utils/localStorage";
 import { useMutation } from "@apollo/client";
 import { SAVE_ANIME } from "../../utils/mutations";
-import { searchAnimeByName } from "../../utils/API";
+// import { searchAnimeByName } from "../../utils/API";
 
 const SearchAnimeForm = () => {
   const [searchedAnimes, setSearchedAnimes] = useState([]);
@@ -26,17 +26,17 @@ const SearchAnimeForm = () => {
       return false;
     }
 
-    try {
-      // Search for anime by name using the API function
-      const animeData = await searchAnimeByName(searchInput);
+  //   try {
+  //     // Search for anime by name using the API function
+  //     const animeData = await searchAnimeByName(searchInput);
 
-      console.log("Anime data:", animeData);
+  //     console.log("Anime data:", animeData);
 
-      setSearchedAnimes(animeData);
-      setSearchInput("");
-    } catch (err) {
-      console.error("An error occurred while searching for animes:", err);
-    }
+  //     setSearchedAnimes(animeData);
+  //     setSearchInput("");
+  //   } catch (err) {
+  //     console.error("An error occurred while searching for animes:", err);
+  //   }
   };
 
   const handleSaveAnime = async (animeId) => {
