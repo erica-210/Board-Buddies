@@ -7,16 +7,20 @@ const axios = require("axios");
 const resolvers = {
   Query: {
     me: async (_, __, context) => {
-      // Implement logic to fetch the current user based on the authentication token in the context
-      // Example: return await context.getUser();
+     
+       return await User.findById({ _id: context.user._id });
+    },
+     meBasic: async (_, __, context) => {
+        return await User.findOne({ _id: context.user._id });
     },
     // get all users
     users: async () => {
       return User.find().populate("savedAnime");
     },
     // get a user by username
-    user: async (parent, { username }) => {
-      return User.findOne({ username }).populate("savedAnime");
+    user: async (_,__,context) => {
+      
+      return User.findOne({ username: context.user.username }).populate("savedAnime");
     },
     // get all posts
     Post: async () => {

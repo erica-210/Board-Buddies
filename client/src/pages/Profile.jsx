@@ -5,7 +5,20 @@ import AnimeWatched from "../components/AnimeWatched";
 import PostForm from "../components/PostForm";
 import AnimeToWatch from "../components/AnimeToWatch";
 
+import { useQuery } from "@apollo/client";
+import { GET_ME_BASIC } from "../utils/queries";
+
+
 const Profile = (props) => {
+
+  const { loading, data } = useQuery(GET_ME_BASIC);
+  const user = data?.user || {};
+  console.log(user);
+
+
+
+
+
   return (
     <>
       <div className="welcome-container">

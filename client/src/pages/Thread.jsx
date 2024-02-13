@@ -10,6 +10,7 @@ const Thread = () => {
 
   const { loading, data } = useQuery(QUERY_POSTS);
   const posts = data?.Post || [];
+  console.log(posts);
   
 
   return (
