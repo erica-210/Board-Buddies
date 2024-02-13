@@ -35,7 +35,7 @@ const SinglePost = () => {
       <h2>Comments</h2>
       <ul>
         {post.comments.map((comment, index) => (
-          <li key={index}>{comment}</li>
+          <li key={comment.id || index}>{comment.content}</li>
         ))}
       </ul>
       <CommentForm onSubmit={handleAddComment} />
