@@ -35,26 +35,38 @@ const resolvers = {
       return Posts.find().populate("user");
     },
     // get a post by id
-    postById: async (parent, { postId }) => {
-      return Posts.findOne({ postId }).populate("user");
+    postById: async (parent, { _id }) => {
+      return Posts.findOne({ _id });
     },
     // get all anime
     searchAnime: async (parent, { query }) => {
       try {
         const response = await axios.get(
-          `https://api.jikan.moe/v4/anime?q=${query}`
+          `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}`
         );
         const animeData = response.data.data;
-        return animeData.map((anime) => {
+
+        // Validate animeData structure
+        if (!animeData || typeof animeData !== "object") {
+          throw new Error("Invalid anime data received");
+        }
+        // Extract genres from animeData
+        let genres = [];
+        if (animeData.genres && Array.isArray(animeData.genres)) {
+          genres = animeData.genres.map((genre) => ({
+            mal_id: genre.mal_id,
+            name: genre.name,
+          }));
+        }
+        // return animeData.map((anime) => {
           return {
-            mal_id: anime.mal_id,
-            title: anime.title,
-            images: anime.images,
-            episodes: anime.episodes,
-            synopsis: anime.synopsis,
-            genres: anime.genres,
-          };
-        });
+            mal_id: animeData.mal_id || null,
+            title: animeData.title || "Unknown Title",
+            images: animeData.images || {},
+            episodes: animeData.episodes || 0,
+            synopsis: animeData.synopsis || "No synopsis available",
+            genres: genres,
+        };
       } catch (error) {
         //Handle error
         console.error("Error fetching anime details:", error);

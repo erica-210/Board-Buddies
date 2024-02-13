@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const GET_ME = gql`
-  query me {
+  query getMe {
     me {
       _id
       username
@@ -53,7 +53,7 @@ export const meBasic = gql`{
 }`;
 
 export const GET_USERS = gql`
-  query users {
+  query getUsers {
     users {
       _id
       username
@@ -111,7 +111,7 @@ export const QUERY_POSTS = gql`
 `;
 
 export const GET_POST_BY_ID = gql`
-  query postById($postId: ID!) {
+  query getPostById($postId: ID!) {
     postById(postId: $postId) {
       postId
       title
@@ -133,8 +133,8 @@ export const GET_POST_BY_ID = gql`
 `;
 
 export const GET_ANIMES = gql`
-  query searchAnime($title: String!) {
-    anime(title: $title) {
+  query getSearchAnime($query: String!) {
+    searchAnime(query: $query) {
       mal_id
       title
       images {
@@ -159,14 +159,27 @@ export const GET_ANIMES = gql`
 `;
 
 export const GET_ANIME_BY_ID = gql`
-  query animeById($animeId: ID!) {
+  query getAnimeById($animeId: ID!) {
     animeById(animeId: $animeId) {
       mal_id
       title
-      images
+      images {
+        jpg {
+          image_url
+          small_image_url
+          large_image_url
+        }
+        webp {
+          image_url
+          small_image_url
+          large_image_url
+        }
+      }
       episodes
       synopsis
-      genres
+      genres {
+        name
+      }
     }
   }
 `;
