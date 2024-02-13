@@ -4,22 +4,27 @@ import { Col, Row, Divider } from "antd";
 import AnimeWatched from "../components/AnimeWatched";
 import PostForm from "../components/PostForm";
 import AnimeToWatch from "../components/AnimeToWatch";
+import Auth from "../utils/auth";
 
 import { useQuery } from "@apollo/client";
-import { GET_ME_BASIC } from "../utils/queries";
+import { meBasic } from "../utils/queries";
 
 
-const Profile = (props) => {
+const Profile = () => {
 
-  const { loading, data } = useQuery(GET_ME_BASIC);
-  const user = data?.user || {};
-  console.log(user);
+  const { loading, data } = useQuery(meBasic);
+  const users = data?.meBasic || {};
+  console.log(users);
 
+  const user = Auth.getProfile().data._id;
+  const user_id = `"${user}"`;
+  
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-
-
-  return (
+ return (
     <>
       <div className="welcome-container">
         <h1 className="welcome">Welcome to your Profile Page</h1>
@@ -30,8 +35,8 @@ const Profile = (props) => {
             <h2 className="userinfo">User Info Here</h2>
           </Divider>
 
-          <h2 className="userinfo">{props.username}</h2>
-          {console.log(props.username)}
+          <h2 className="userinfo"></h2>
+          
           <div className="dropdowns">
             <AnimeWatched />
             <AnimeToWatch />

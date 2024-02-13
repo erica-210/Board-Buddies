@@ -44,15 +44,13 @@ export const GET_ME = gql`
   }
 `;
 
-export const GET_ME_BASIC = gql`
-  query meBasic  {
-    user  {
-      _id
-      username
-      email
-    }
+export const meBasic = gql`{
+  meBasic {
+    _id
+    username
+    email
   }
-`;
+}`;
 
 export const GET_USERS = gql`
   query users {

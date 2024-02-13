@@ -6,12 +6,10 @@ const axios = require("axios");
 
 const resolvers = {
   Query: {
-    me: async (_, __, context) => {
-     
-       return await User.findById({ _id: context.user._id });
-    },
-     meBasic: async (_, __, context) => {
-        return await User.findOne({ _id: context.user._id });
+     meBasic: async () => {
+      
+        return await User.find();
+     },
     me: async (parent, args, context) => {
       if (context.user) {
         // Fetch user data excluding sensitive fields
