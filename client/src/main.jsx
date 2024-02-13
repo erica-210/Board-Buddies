@@ -19,7 +19,7 @@ const router = createBrowserRouter([
       { path: "/profile", element: <Profile /> },
       { path: "/search", element: <SearchAnimes /> },
       { path: "/anime/:id", element: <SingleAnime /> },
-      { path: "/post/:id", element: <SinglePost /> },
+      { path: "/post/:_id", element: <SinglePost /> },
       { path: "/thread", element: <Thread />},
     ]
   },

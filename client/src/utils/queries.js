@@ -67,6 +67,7 @@ export const GET_USERS = gql`
 export const QUERY_POSTS = gql`
   query Post {
     Post {
+      _id
       title
       content
       user {
