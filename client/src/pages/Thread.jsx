@@ -2,13 +2,28 @@ import React from 'react';
 
 import AllPosts from '../components/AllPosts';
 
+import { QUERY_POSTS } from '../utils/queries'; 
+import { useQuery } from '@apollo/client';
+
+
 const Thread = () => {
+
+  const { loading, data } = useQuery(QUERY_POSTS);
+  const posts = data?.Post || [];
+  
+
   return (
     <div>
       <div className="welcome-container" >
       <h1 className="welcome" >Welcome to the Thread Page</h1>
       </div>
-      <AllPosts />
+      {loading ? ( <div>Loading...</div> 
+      ) : (
+          <AllPosts 
+         posts={posts} 
+         title = {"This is all Post!"}
+        />
+        )}
     </div>
   );
 };
