@@ -18,7 +18,7 @@ const resolvers = {
       return User.findOne({ username }).populate("savedAnime");
     },
     // get all posts
-    posts: async (parent, __, ___) => {
+    Post: async () => {
       return Posts.find().populate("user");
     },
     // get a post by id

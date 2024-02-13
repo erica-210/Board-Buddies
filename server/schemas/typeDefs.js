@@ -61,7 +61,7 @@ const typeDefs = gql`
     user(username: String!): User
     anime(id: ID!): Anime
     searchanime(title: String!): [Anime]
-    posts: [Post]
+    Post: [Post]!
     postById(postId: ID!): Post
   }
 
