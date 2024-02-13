@@ -42,7 +42,7 @@ const resolvers = {
     searchAnime: async (parent, { query }) => {
       try {
         const response = await axios.get(
-          `https://api.jikan.moe/v4/search/anime?q=${query}&limit=10`
+          `https://api.jikan.moe/v4/anime?q=${query}`
         );
         const animeData = response.data.data;
         return animeData.map((anime) => {

@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import Auth from "../../utils/auth";
-
-import { saveAnimeIds, getSavedAnimeIds } from "../../utils/localStorage";
-import { useMutation } from "@apollo/client";
+import { Link } from "react-router-dom";
+import { useMutation, useQuery } from "@apollo/client";
 import { SAVE_ANIME } from "../../utils/mutations";
-
+import { GET_ANIMES } from "../../utils/queries";
+import { saveAnimeIds, getSavedAnimeIds } from "../../utils/localStorage";
 
 const SearchAnimeForm = () => {
-  const [searchedAnimes, setSearchedAnimes] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [savedAnimeIds, setSavedAnimeIds] = useState(getSavedAnimeIds());
+  const { loading, error, data } = useQuery(GET_ANIMES, {
+    variables: { title: searchInput }
+  });
+  
+  console.log(data);
 
   useEffect(() => {
     return () => saveAnimeIds(savedAnimeIds);
@@ -26,24 +29,27 @@ const SearchAnimeForm = () => {
       return false;
     }
 
-  //   try {
-  //     // Search for anime by name using the API function
-  //     const animeData = await searchAnimeByName(searchInput);
-
-  //     console.log("Anime data:", animeData);
-
-  //     setSearchedAnimes(animeData);
-  //     setSearchInput("");
-  //   } catch (err) {
-  //     console.error("An error occurred while searching for animes:", err);
-  //   }
+    try {
+      setSearchInput(""); // Clear the search input
+    } catch (err) {
+      console.error("An error occurred while searching for animes:", err);
+    }
   };
 
   const handleSaveAnime = async (animeId) => {
-    // find the anime in `searchedAnimes` state by the matching id
-    const animeToSave = searchedAnimes.find(
-      (anime) => anime.animeId === animeId
-    );
+    if (!data || !Array.isArray(data.anime)) {
+      console.error("No anime data available");
+      return;
+    }
+
+    // find the anime in `data.anime` by the matching id
+    const animeToSave = data.anime.find((anime) => anime.mal_id === animeId);
+
+    // If animeToSave is not found, log an error and return
+    if (!animeToSave) {
+      console.error("Anime not found");
+      return;
+    }
 
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -54,9 +60,9 @@ const SearchAnimeForm = () => {
     }
 
     try {
-      // Execute the SAVE_animemutation
+      // Execute the SAVE_ANIME mutation
       const { data } = await saveAnimeMutation({
-        variables: { anime: animeToSave },
+        variables: { anime_id: animeToSave.mal_id },
       });
 
       if (!data) {
@@ -65,32 +71,37 @@ const SearchAnimeForm = () => {
 
       console.log("anime saved successfully:", animeToSave);
 
-      // if book successfully saves to user's account, save anime id to state
-      setSavedAnimeIds([...savedAnimeIds, animeToSave.animeId]);
+      // if anime successfully saved to user's account, update savedAnimeIds state
+      setSavedAnimeIds([...savedAnimeIds, animeToSave.mal_id]);
     } catch (err) {
       console.error("An error occurred while saving the anime:", err);
     }
   };
 
-  const query = "naruto"; // Example query string
-  fetch(`https://api.jikan.moe/v4/search/anime?q=${query}&limit=10`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log(data);
-    })
-    .catch(error => {
-      console.error('There was a problem with the fetch operation:', error);
-    });
+  // const query = "naruto"; // Example query string
+  // fetch(`https://api.jikan.moe/v4/anime?q=${query}`)
+  //   .then(response => {
+  //     if (!response.ok) {
+  //       throw new Error('Network response was not ok');
+  //     }
+  //     return response.json();
+  //   })
+  //   .then(data => {
+  //     console.log(data);
+  //   })
+  //   .catch(error => {
+  //     console.error('There was a problem with the fetch operation:', error);
+  //   });
 
   return (
     <div>
       <div
-        style={{ color: "white", backgroundColor: "#001433", padding: "1rem", borderRadius: "8px" }}
+        style={{
+          color: "white",
+          backgroundColor: "#001433",
+          padding: "1rem",
+          borderRadius: "8px",
+        }}
       >
         <div>
           <h1>Search for a new anime!</h1>
@@ -119,20 +130,23 @@ const SearchAnimeForm = () => {
               </button>
             </div>
           </form>
+          {loading && <p>Loading...</p>}
+          {error && <p>Error: {error.message}</p>}
+          {/* {console.log(error.message)} */}
         </div>
       </div>
 
       <div>
         <h2 style={{ paddingTop: "1.25rem" }}>
-          {searchedAnimes.length > 0 &&
-            `Viewing ${searchedAnimes.length} results: `}
+          {data &&
+            data.anime &&
+            data.anime.length > 0 &&
+            `Viewing ${data.anime.length} results: `}
         </h2>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
-          {console.log("Searched animes:", searchedAnimes)}
-          {searchedAnimes &&
-            Array.isArray(searchedAnimes) &&
-            searchedAnimes.map((anime) => {
-              // Guard against searchedAnimes being null or undefined
+          {data &&
+            data.anime &&
+            data.anime.map((anime) => {
               return (
                 <div
                   key={anime.mal_id}
