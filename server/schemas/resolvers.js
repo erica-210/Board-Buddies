@@ -35,8 +35,8 @@ const resolvers = {
       return Posts.find().populate("user");
     },
     // get a post by id
-    postById: async (parent, { _id }) => {
-      return Posts.findOne({ _id });
+    postById: async (parent, { postId }) => {
+      return Posts.findOne({ postId }).populate("user");
     },
     // get all anime
     searchAnime: async (parent, { query }) => {
