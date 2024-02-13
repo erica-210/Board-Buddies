@@ -38,7 +38,8 @@ const PostForm = () => {
         variables: {
           title: titleState, // Add title field
           content: contentState,
-          user:  Auth.getProfile().data._id// Add content field
+          user:  Auth.getProfile().data._id,// Add content field
+          username: Auth.getProfile().data.username,
         },
       });
       console.log("Post added successfully:", data);
@@ -88,7 +89,6 @@ const PostForm = () => {
 
   return (
     <div>
-      <h3>What do you have to say about this board game?</h3>
 
       {Auth.loggedIn() ? (
         <>

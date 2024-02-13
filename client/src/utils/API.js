@@ -1,45 +1,25 @@
-// // route to get logged in user's info (needs the token)
-// export const getMe = (token) => {
-//   return fetch("/api/users/me", {
-//     headers: {
-//       "Content-Type": "application/json",
-//       authorization: `Bearer ${token}`,
-//     },
-//   })
-//   .then(response => response.json());
-// };
 
-// // Save a board game for a logged-in user
-// export const saveBoardGame = (boardGameData, token) => {
-//   return fetch("/api/users/boardgames", {
-//     method: "PUT",
-//     headers: {
-//       "Content-Type": "application/json",
-//       authorization: `Bearer ${token}`,
-//     },
-//     body: JSON.stringify(boardGameData),
-//   })
-//   .then(response => response.json());
-// };
-
-// // Remove a saved board game for a logged-in user
-// export const deleteBoardGame = (boardGameId, token) => {
-//   return fetch(`/api/users/boardgames/${boardGameId}`, {
-//     method: "DELETE",
-//     headers: {
-//       authorization: `Bearer ${token}`,
-//     },
-//   })
-//   .then(response => response.json());
-// };
-
-// // Make a search to anime api without axios
-// export const searchAnimeApi = (query) => {
-//   return fetch(`https://api.jikan.moe/v4/anime?q=${query}`)
-//   .then(response => response.json()); // Convert response to JSON
-// };
 
 import axios from "axios";
+
+// // Define the base URL for the MyAnimeList API
+// const MAL_API_URL = 'https://api.myanimelist.net/v2/anime/1';
+
+// // Define the access token for the MyAnimeList API
+// const ACCESS_TOKEN = 'yourbetterwork';
+
+// // Make a GET request to the MyAnimeList API
+// axios.get(MAL_API_URL, {
+//   headers: {
+//     Authorization: `Bearer ${ACCESS_TOKEN}`
+//   }
+// })
+// .then(response => {
+//   console.log(response.data);
+// })
+// .catch(error => {
+//   console.error('Error fetching data from MyAnimeList API:', error);
+// });
 
 // Define the base URL for the Anime API
 const BASE_URL = "https://api.jikan.moe/v4";

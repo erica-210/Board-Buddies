@@ -11,7 +11,9 @@ const Home = () => {
   return (
     <div style={{ textAlign: "center" }}>
     <div>
-      <Title>Welcome to the anime discovery hub!</Title>
+      <div className="welcome-container" >
+      <h1 className="welcome" >Welcome to the anime discovery hub!</h1>
+      </div>
       <Login />
       <Signup />
     </div>

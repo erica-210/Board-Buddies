@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { getSavedAnimeIds, saveAnimeIds } from "../../utils/localStorage";
+import { Link } from "react-router-dom";
+import { getSavedAnimeData } from "../../utils/localStorage";
+import { Select } from "antd";
+
+const { Option } = Select;
 
 const AnimeWatched = () => {
   // State to store the list of anime watched
@@ -10,50 +14,27 @@ const AnimeWatched = () => {
 
   // Load anime watched from local storage on component mount
   useEffect(() => {
-    const storedAnimeWatched = getSavedAnimeIds();
-    console.log("Stored anime IDs:", storedAnimeWatched);
-    setAnimeWatched(storedAnimeWatched);
+    const savedAnimeData = getSavedAnimeData();
+    console.log("Saved anime data:", savedAnimeData);
+    setAnimeWatched(savedAnimeData.watched);
   }, []);
 
-  // Function to handle removing an anime from the watched list
-  const handleRemoveAnime = (animeId) => {
-    const updatedAnimeWatched = animeWatched.filter(
-      (savedAnimeId) => savedAnimeId !== animeId
-    );
-    console.log("Updated anime watched after removal:", updatedAnimeWatched);
-    setAnimeWatched(updatedAnimeWatched);
-    saveAnimeIds(updatedAnimeWatched);
+  const handleSelectChange = (value) => {
+    setSelectedAnimeId(value);
   };
 
-  // Log selected anime ID when it changes
-  useEffect(() => {
-    console.log("Selected anime ID:", selectedAnimeId);
-  }, [selectedAnimeId]);
 
   return (
     <div>
-      <h2>Watched List</h2>
-      <select
-        value={selectedAnimeId}
-        onChange={(e) => setSelectedAnimeId(e.target.value)}
-      >
-        <option value="">Select an anime</option>
-        {/* Map over anime watched to generate options */}
+      <h2>Watched Anime</h2>
+      <Select value={selectedAnimeId} onChange={handleSelectChange} style={{ width: 200 }}>
+        <Option value="">Select an anime</Option>
         {animeWatched.map((animeId, index) => (
-          <option key={index} value={animeId}>
-            {animeId}
-          </option>
+          <Option key={index} value={animeId}>
+            <Link to={`/anime/${animeId}`}>{animeId}</Link>
+          </Option>
         ))}
-      </select>
-
-      <ul>
-        {animeWatched.map((animeId, index) => (
-          <li key={index}>
-            {animeId} {/* Display anime information here */}
-            <button onClick={() => handleRemoveAnime(animeId)}>Remove</button>
-          </li>
-        ))}
-      </ul>
+      </Select>
     </div>
   );
 };
