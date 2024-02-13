@@ -5,7 +5,7 @@ import Auth from "../../utils/auth";
 import { saveAnimeIds, getSavedAnimeIds } from "../../utils/localStorage";
 import { useMutation } from "@apollo/client";
 import { SAVE_ANIME } from "../../utils/mutations";
-// import { searchAnimeByName } from "../../utils/API";
+
 
 const SearchAnimeForm = () => {
   const [searchedAnimes, setSearchedAnimes] = useState([]);
@@ -72,6 +72,21 @@ const SearchAnimeForm = () => {
     }
   };
 
+  const query = "naruto"; // Example query string
+  fetch(`https://api.jikan.moe/v4/search/anime?q=${query}&limit=10`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+
   return (
     <div>
       <div
@@ -113,7 +128,7 @@ const SearchAnimeForm = () => {
             `Viewing ${searchedAnimes.length} results: `}
         </h2>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
-          {/* {console.log("Searched animes:", searchedAnimes)} */}
+          {console.log("Searched animes:", searchedAnimes)}
           {searchedAnimes &&
             Array.isArray(searchedAnimes) &&
             searchedAnimes.map((anime) => {
