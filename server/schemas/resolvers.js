@@ -6,6 +6,10 @@ const axios = require("axios");
 
 const resolvers = {
   Query: {
+     meBasic: async () => {
+      
+        return await User.find();
+     },
     me: async (parent, args, context) => {
       if (context.user) {
         // Fetch user data excluding sensitive fields
@@ -22,8 +26,9 @@ const resolvers = {
       return User.find().populate("savedAnime");
     },
     // get a user by username
-    user: async (parent, { username }) => {
-      return User.findOne({ username }).populate("savedAnime");
+    user: async (_,__,context) => {
+      
+      return User.findOne({ username: context.user.username }).populate("savedAnime");
     },
     // get all posts
     Post: async () => {
