@@ -60,6 +60,7 @@ const typeDefs = gql`
     users: [User]
     user(username: String!): User
     anime(id: ID!): Anime
+    searchanime(title: String!): [Anime]
     posts: [Post]
     postById(postId: ID!): Post
   }
