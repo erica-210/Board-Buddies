@@ -5,9 +5,16 @@ const axios = require("axios");
 
 const resolvers = {
   Query: {
-    me: async (_, __, context) => {
-      // Implement logic to fetch the current user based on the authentication token in the context
-      // Example: return await context.getUser();
+    me: async (parent, args, context) => {
+      if (context.user) {
+        // Fetch user data excluding sensitive fields
+        const userData = await User.findOne({ _id: context.user._id }).select(
+          "-__v -password"
+        );
+        return userData;
+      }
+      // Throw error if user is not authenticated
+      throw new AuthenticationError("Not logged in!");
     },
     // get all users
     users: async () => {
