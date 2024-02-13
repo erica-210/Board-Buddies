@@ -18,7 +18,7 @@ const AllPosts = ({posts, title}) => {
             <li key={post._id}>
               <h2>username: {post.user.username} Title:{post.title}</h2>
               <p>{post.content}</p>
-              <Link to={`/singlepost/${post._id}`}>View Post</Link>
+              <Link to={`/post/${post._id}`}>View Post</Link>
             </li>
           ))}
         </ul>
