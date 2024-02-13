@@ -12,6 +12,16 @@ const resolvers = {
     },
      meBasic: async (_, __, context) => {
         return await User.findOne({ _id: context.user._id });
+    me: async (parent, args, context) => {
+      if (context.user) {
+        // Fetch user data excluding sensitive fields
+        const userData = await User.findOne({ _id: context.user._id }).select(
+          "-__v -password"
+        );
+        return userData;
+      }
+      // Throw error if user is not authenticated
+      throw new AuthenticationError("Not logged in!");
     },
     // get all users
     users: async () => {

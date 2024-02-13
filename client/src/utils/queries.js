@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const GET_ME = gql`
   query me {
@@ -6,18 +6,26 @@ export const GET_ME = gql`
       _id
       username
       email
-      gameCount
-      savedGames {
-        gameId
-        gameName
-        creators
-        category
-        players
-        playTime
-        recommendedAge
-        description
-        gameImage
-        gamelink
+      savedAnime {
+        mal_id
+        title
+        images {
+          jpg {
+            image_url
+            small_image_url
+            large_image_url
+          }
+          webp {
+            image_url
+            small_image_url
+            large_image_url
+          }
+        }
+        episodes
+        synopsis
+        genres {
+          name
+        }
       }
       posts {
         postId
@@ -52,11 +60,28 @@ export const GET_USERS = gql`
       _id
       username
       email
-      gameCount
-      savedGames {
-        gameId
-        gameName
+      savedAnime {
+        mal_id
+        title
+        images {
+          jpg {
+            image_url
+            small_image_url
+            large_image_url
+          }
+          webp {
+            image_url
+            small_image_url
+            large_image_url
+          }
+        }
+        episodes
+        synopsis
+        genres {
+          name
+        }
       }
+
       posts {
         postId
         title
@@ -114,10 +139,23 @@ export const GET_ANIMES = gql`
     anime(title: $title) {
       mal_id
       title
-      images
+      images {
+        jpg {
+          image_url
+          small_image_url
+          large_image_url
+        }
+        webp {
+          image_url
+          small_image_url
+          large_image_url
+        }
+      }
       episodes
       synopsis
-      genres
+      genres {
+        name
+      }
     }
   }
 `;
