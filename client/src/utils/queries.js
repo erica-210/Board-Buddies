@@ -113,23 +113,15 @@ export const QUERY_POSTS = gql`
 `;
 
 export const GET_POST_BY_ID = gql`
-  query getPostById($postId: ID!) {
-    postById(postId: $postId) {
-      postId
+  query getPostById($_id: ID!) {
+    postById(_id: $_id) {
+      _id
       title
       content
       user {
-        _id
         username
       }
-      comments {
-        CommentId
-        commentText
-        user {
-          _id
-          username
-        }
-      }
+      
     }
   }
 `;

@@ -34,9 +34,36 @@ const resolvers = {
       return Posts.find().populate("user");
     },
     // get a post by id
-    postById: async (parent, { _id }) => {
-      return Posts.findOne({ _id });
+    postById: async (_, { _id }) => {
+      try {
+        // Fetch the post data
+        const postData = await Posts.findOne({ _id });
+
+        // Ensure the post data is fetched successfully
+        if (!postData) {
+          throw new Error("Post not found");
+        }
+
+        // Fetch the associated user data
+        const userData = await User.findById(postData.user);
+
+        // Ensure the user data is fetched successfully
+        if (!userData) {
+          throw new Error("User not found");
+        }
+
+        // Return the post data with the populated user field
+        return {
+          ...postData.toObject(),
+          user: userData.toObject(),
+        };
+      } catch (error) {
+        console.error("Error fetching post data:", error.message);
+        // Return null or empty object in case of error
+        return null;
+      }
     },
+
     // get all anime
     searchAnime: async (_, { name }) => {
       try {
@@ -45,7 +72,7 @@ const resolvers = {
         );
         const animeData = response.data.data;
 
-        console.log(animeData)
+        console.log(animeData);
 
         // Validate animeData structure
         if (!animeData || !animeData.length) {
@@ -62,15 +89,15 @@ const resolvers = {
           }));
         }
         // return animeData.map((anime) => {
-         const searchResults = animeData.map((anime) => ({
-      mal_id: anime.mal_id || null,
-      title: anime.title || "Unknown Title",
-      images: anime.images || {},
-      episodes: anime.episodes || 0,
-      synopsis: anime.synopsis || "No synopsis available",
-      genres: genres,
-    }));
-    return searchResults;
+        const searchResults = animeData.map((anime) => ({
+          mal_id: anime.mal_id || null,
+          title: anime.title || "Unknown Title",
+          images: anime.images || {},
+          episodes: anime.episodes || 0,
+          synopsis: anime.synopsis || "No synopsis available",
+          genres: genres,
+        }));
+        return searchResults;
       } catch (error) {
         //Handle error
         console.error("Error fetching anime details:", error);
@@ -105,7 +132,7 @@ const resolvers = {
           images: animeData.images || {},
           episodes: animeData.episodes || 0,
           synopsis: animeData.synopsis || "No synopsis available",
-          score: animeData.score|| "No score available",
+          score: animeData.score || "No score available",
           genres: genres,
         };
       } catch (error) {
@@ -189,7 +216,7 @@ const resolvers = {
       throw new AuthenticationError("Login required!");
     },
     // add a post
-    addPost: async (parent, { title, content }, context) => {
+    addPost: async (_, { title, content }, context) => {
       if (context.user) {
         const post = await Posts.create({
           title,
