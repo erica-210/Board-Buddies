@@ -133,8 +133,8 @@ export const GET_POST_BY_ID = gql`
 `;
 
 export const GET_ANIMES = gql`
-  query getSearchAnime($query: String!) {
-    searchAnime(query: $query) {
+  query getSearchAnime($name: String!) {
+    searchAnime(name: $name) {
       mal_id
       title
       images {
@@ -159,27 +159,21 @@ export const GET_ANIMES = gql`
 `;
 
 export const GET_ANIME_BY_ID = gql`
-  query getAnimeById($animeId: ID!) {
-    animeById(animeId: $animeId) {
-      mal_id
-      title
+  query getAnime($animeId: ID!) {
+    anime(animeId: $animeId) {
+      episodes
+      genres {
+        mal_id
+        name
+      }
       images {
         jpg {
           image_url
-          small_image_url
-          large_image_url
-        }
-        webp {
-          image_url
-          small_image_url
-          large_image_url
         }
       }
-      episodes
+      mal_id
       synopsis
-      genres {
-        name
-      }
+      title
     }
   }
 `;

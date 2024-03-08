@@ -1,15 +1,13 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { Anime, User, Posts, } = require("../models");
+const { Anime, User, Posts } = require("../models");
 const { signToken } = require("../utils/auth");
 const axios = require("axios");
 
-
 const resolvers = {
   Query: {
-     meBasic: async () => {
-      
-        return await User.find();
-     },
+    meBasic: async () => {
+      return await User.find();
+    },
     me: async (parent, args, context) => {
       if (context.user) {
         // Fetch user data excluding sensitive fields
@@ -26,9 +24,10 @@ const resolvers = {
       return User.find().populate("savedAnime");
     },
     // get a user by username
-    user: async (_,__,context) => {
-      
-      return User.findOne({ username: context.user.username }).populate("savedAnime");
+    user: async (_, __, context) => {
+      return User.findOne({ username: context.user.username }).populate(
+        "savedAnime"
+      );
     },
     // get all posts
     Post: async () => {
@@ -39,17 +38,21 @@ const resolvers = {
       return Posts.findOne({ _id });
     },
     // get all anime
-    searchAnime: async (parent, { query }) => {
+    searchAnime: async (_, { name }) => {
       try {
         const response = await axios.get(
-          `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}`
+          `https://api.jikan.moe/v4/anime?q=${name}&sfw`
         );
         const animeData = response.data.data;
 
+        console.log(animeData)
+
         // Validate animeData structure
-        if (!animeData || typeof animeData !== "object") {
-          throw new Error("Invalid anime data received");
+        if (!animeData || !animeData.length) {
+          // Return an empty array if no anime data is found
+          return [];
         }
+
         // Extract genres from animeData
         let genres = [];
         if (animeData.genres && Array.isArray(animeData.genres)) {
@@ -59,14 +62,15 @@ const resolvers = {
           }));
         }
         // return animeData.map((anime) => {
-          return {
-            mal_id: animeData.mal_id || null,
-            title: animeData.title || "Unknown Title",
-            images: animeData.images || {},
-            episodes: animeData.episodes || 0,
-            synopsis: animeData.synopsis || "No synopsis available",
-            genres: genres,
-        };
+         const searchResults = animeData.map((anime) => ({
+      mal_id: anime.mal_id || null,
+      title: anime.title || "Unknown Title",
+      images: anime.images || {},
+      episodes: anime.episodes || 0,
+      synopsis: anime.synopsis || "No synopsis available",
+      genres: genres,
+    }));
+    return searchResults;
       } catch (error) {
         //Handle error
         console.error("Error fetching anime details:", error);
@@ -74,11 +78,11 @@ const resolvers = {
       }
     },
     // get a single anime by id
-    anime: async (parent, { id }) => {
+    anime: async (_, { animeId }) => {
       try {
         // Make API request to fetch anime data
         const response = await axios.get(
-          `https://api.jikan.moe/v4/anime/${id}/full`
+          `https://api.jikan.moe/v4/anime/${animeId}/full`
         );
         const animeData = response.data.data;
 

@@ -15,7 +15,7 @@ function Login(props) {
   const navigate = useNavigate();
 
   const handleFormSubmit = async () => {
-    // event.preventDefault();
+    event.preventDefault();
     try {
       const mutationResponse = await login({
         variables: { email: formState.email, password: formState.password },

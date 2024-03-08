@@ -19,7 +19,7 @@ const typeDefs = gql`
     genres: [Genre]
   }
 
-  type searchAnime {
+  type SearchAnime {
     mal_id: ID!
     title: String!
     images: AnimeImages
@@ -69,8 +69,8 @@ const typeDefs = gql`
     meBasic: User
     users: [User]
     user: User
-    anime(id: ID!): Anime
-    searchAnime(title: String!): [Anime]
+    anime(animeId: ID!): Anime
+    searchAnime(name: String!): [SearchAnime]
     Post: [Post]!
     postById(postId: ID!): Post
   }

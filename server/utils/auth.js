@@ -9,29 +9,26 @@ module.exports = {
       code: 'UNAUTHENTICATED',
     },
   }),
-  authMiddleware: function ({ req, res }) { // Add res as a parameter
+  authMiddleware: function ({ req }) {
     // allows token to be sent via req.body, req.query, or headers
     let token = req.body.token || req.query.token || req.headers.authorization;
-    // [“Bearer”, “<tokenvalue>“]
+
+    // ["Bearer", "<tokenvalue>"]
     if (req.headers.authorization) {
       token = token.split(' ').pop().trim();
     }
+
     if (!token) {
       return req;
     }
+
     try {
-      const decoded = jwt.verify(token, secret);
-      req.user = decoded.data; // Assign decoded data to req.user
-    } catch (error) {
-      if (error.name === 'TokenExpiredError') {
-        console.log('Access token expired');
-        // Redirect to login page when access token expires
-        res.redirect('/'); // Redirect to login page
-      } else {
-        console.log('Invalid token:', error.message);
-        // Handle invalid token error
-      }
+      const { data } = jwt.verify(token, secret, { maxAge: expiration });
+      req.user = data;
+    } catch {
+      console.log('Invalid token');
     }
+
     return req;
   },
   signToken: function ({ firstName, email, _id }) {
