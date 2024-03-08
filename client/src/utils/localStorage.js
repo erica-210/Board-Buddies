@@ -1,4 +1,3 @@
-
 export const getSavedAnimeIds = () => {
   const savedAnimeIds = localStorage.getItem("saved_anime")
     ? JSON.parse(localStorage.getItem("saved_anime"))

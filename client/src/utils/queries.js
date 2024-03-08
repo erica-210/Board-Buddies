@@ -44,13 +44,15 @@ export const GET_ME = gql`
   }
 `;
 
-export const meBasic = gql`{
-  meBasic {
-    _id
-    username
-    email
+export const meBasic = gql`
+  {
+    meBasic {
+      _id
+      username
+      email
+    }
   }
-}`;
+`;
 
 export const GET_USERS = gql`
   query getUsers {
@@ -111,23 +113,15 @@ export const QUERY_POSTS = gql`
 `;
 
 export const GET_POST_BY_ID = gql`
-  query getPostById($postId: ID!) {
-    postById(postId: $postId) {
-      postId
+  query getPostById($_id: ID!) {
+    postById(_id: $_id) {
+      _id
       title
       content
       user {
-        _id
         username
       }
-      comments {
-        CommentId
-        commentText
-        user {
-          _id
-          username
-        }
-      }
+      
     }
   }
 `;
@@ -171,6 +165,7 @@ export const GET_ANIME_BY_ID = gql`
           image_url
         }
       }
+      score
       mal_id
       synopsis
       title

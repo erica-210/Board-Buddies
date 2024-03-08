@@ -16,6 +16,7 @@ const typeDefs = gql`
     images: AnimeImages
     episodes: Int
     synopsis: String
+    score: Float
     genres: [Genre]
   }
 
@@ -52,6 +53,14 @@ const typeDefs = gql`
     comment: [Comment]
   }
 
+  type PostById {
+    _id: ID!
+    title: String!
+    content: String!
+    user: User
+    comment: [Comment]
+  }
+
   type Comment {
     _id: ID!
     content: String!
@@ -72,7 +81,7 @@ const typeDefs = gql`
     anime(animeId: ID!): Anime
     searchAnime(name: String!): [SearchAnime]
     Post: [Post]!
-    postById(postId: ID!): Post
+    postById(_id: ID!): Post
   }
 
   type Mutation {
