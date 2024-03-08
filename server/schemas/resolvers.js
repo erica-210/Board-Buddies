@@ -105,6 +105,7 @@ const resolvers = {
           images: animeData.images || {},
           episodes: animeData.episodes || 0,
           synopsis: animeData.synopsis || "No synopsis available",
+          score: animeData.score|| "No score available",
           genres: genres,
         };
       } catch (error) {
@@ -116,6 +117,7 @@ const resolvers = {
           images: {},
           episodes: 0,
           synopsis: "No synopsis available",
+          score: "No score available",
           genres: [],
         };
       }

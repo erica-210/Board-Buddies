@@ -44,13 +44,15 @@ export const GET_ME = gql`
   }
 `;
 
-export const meBasic = gql`{
-  meBasic {
-    _id
-    username
-    email
+export const meBasic = gql`
+  {
+    meBasic {
+      _id
+      username
+      email
+    }
   }
-}`;
+`;
 
 export const GET_USERS = gql`
   query getUsers {
@@ -171,6 +173,7 @@ export const GET_ANIME_BY_ID = gql`
           image_url
         }
       }
+      score
       mal_id
       synopsis
       title

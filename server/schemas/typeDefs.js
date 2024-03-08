@@ -16,6 +16,7 @@ const typeDefs = gql`
     images: AnimeImages
     episodes: Int
     synopsis: String
+    score: Float
     genres: [Genre]
   }
 
